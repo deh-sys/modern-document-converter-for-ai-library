@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "doc-to-markdown"
+version = "0.2.0"
+description = "Convert Word documents, ebooks, and PDFs to structured Markdown with smart tracking"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    {name = "Dan"}
+]
+
+dependencies = [
+    "click>=8.1.0",
+    "rich>=13.0.0",
+    "python-docx>=1.0.0",
+    "ebooklib>=0.18",
+    "PyPDF2>=3.0.0",
+    "marker-pdf>=0.2.0",
+    "pyyaml>=6.0",
+]
+
+[project.scripts]
+convert-docs = "doc_to_markdown.cli:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+]
+
+[tool.setuptools]
+packages = ["doc_to_markdown"]
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

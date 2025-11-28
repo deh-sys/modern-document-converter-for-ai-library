@@ -1,0 +1,241 @@
+# Document Processor - Git Ignore
+
+# ============================================================================
+# PYTHON
+# ============================================================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# ============================================================================
+# PROJECT-SPECIFIC
+# ============================================================================
+
+# SQLite databases
+registry/*.db
+registry/*.db-journal
+registry/*.db-wal
+registry/*.db-shm
+
+# Configuration files (user-specific)
+config/*.yaml
+config/*.yml
+config/patterns/*.yaml
+config/patterns/*.yml
+# Keep example configs
+!config/*.example.yaml
+!config/patterns/*.example.yaml
+
+# Logs
+logs/*.log
+logs/*.log.*
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+
+# Output files (processed documents)
+output/
+converted/
+cleaned/
+
+# Test output
+tests/output/
+tests/temp/
+
+# Sample files (large PDFs - optional, adjust as needed)
+# tests/fixtures/*.pdf
+# Uncomment above if test PDFs are very large
+
+# ============================================================================
+# MACOS
+# ============================================================================
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# ============================================================================
+# WINDOWS
+# ============================================================================
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# ============================================================================
+# LINUX
+# ============================================================================
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ============================================================================
+# IDE / EDITORS
+# ============================================================================
+# VSCode
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Vim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+# Emacs
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+
+# Sublime Text
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+*.sublime-project
+
+# ============================================================================
+# LEGACY CODE (keep existing apps separate)
+# ============================================================================
+# Don't ignore the existing step folders - we need them for reference
+# step1--Base_FILENAME--a-caselaw/
+# step1--Base_FILENAME--b-articles/
+# step2--FILE_CODE_NAME---All Files/
+# step3a--NORMALIZE-TXT--MODERN--convert_to_txt--clean--add_headings/
+
+# But ignore their virtual environments and caches
+step1--Base_FILENAME--a-caselaw/venv/
+step1--Base_FILENAME--a-caselaw/__pycache__/
+step1--Base_FILENAME--a-caselaw/.pytest_cache/
+step1--Base_FILENAME--a-caselaw/*.egg-info/
+
+step1--Base_FILENAME--b-articles/venv/
+step1--Base_FILENAME--b-articles/__pycache__/
+step1--Base_FILENAME--b-articles/.pytest_cache/
+step1--Base_FILENAME--b-articles/*.egg-info/
+
+step3a--NORMALIZE-TXT--MODERN--convert_to_txt--clean--add_headings/venv/
+step3a--NORMALIZE-TXT--MODERN--convert_to_txt--clean--add_headings/__pycache__/
+step3a--NORMALIZE-TXT--MODERN--convert_to_txt--clean--add_headings/.pytest_cache/
+
+# ============================================================================
+# DOCUMENTATION (keep everything)
+# ============================================================================
+# Keep all documentation - don't ignore anything in 1-Context-Documentation/
+
+# ============================================================================
+# MISCELLANEOUS
+# ============================================================================
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Package manager
+pip-log.txt
+pip-delete-this-directory.txt

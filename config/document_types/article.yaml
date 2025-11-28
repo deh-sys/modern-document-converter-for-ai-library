@@ -1,0 +1,61 @@
+# Article Document Type Classifier Rules
+#
+# This file defines patterns for identifying academic journal articles.
+#
+# Document Type: Academic Articles
+# Examples: Law review articles, journal papers, scholarly publications
+#
+# STATUS: PLACEHOLDER FOR FUTURE USE (Phase 4)
+# Currently disabled - uncomment and tune patterns when implementing article support
+
+document_type: article
+
+# DISABLED: Remove comment to enable
+enabled: false
+
+# Pattern Matching Rules (EXAMPLES - NOT YET TUNED)
+patterns:
+  # Strong indicators
+  # - pattern: '\bABSTRACT\b'
+  #   description: "Article abstract section"
+  #   weight: 40
+
+  # - pattern: '(?:By|Author).*(?:Professor|Ph\.D\.|J\.D\.)'
+  #   description: "Author attribution with credentials"
+  #   weight: 35
+
+  # - pattern: '\bVol\.\s+\d+|Volume\s+\d+'
+  #   description: "Journal volume number"
+  #   weight: 30
+
+  # Medium indicators
+  # - pattern: '\b(?:Introduction|Conclusion|References|Bibliography)\b'
+  #   description: "Article structure markers"
+  #   weight: 15
+
+  # - pattern: 'Law Review|Journal|Quarterly|Article'
+  #   description: "Journal/publication type"
+  #   weight: 10
+
+  # - pattern: '\bfootnote|\*{1,3}\s+(?:Professor|Assistant Professor)'
+  #   description: "Footnote markers / author footnotes"
+  #   weight: 10
+
+  # Negative indicators
+  # - pattern: '\bv\.\s+\w+|Court of Appeals'
+  #   description: "Case indicators (suggests case, not article)"
+  #   weight: -20
+
+# Confidence thresholds
+confidence_thresholds:
+  high: 60
+  medium: 30
+  low: 10
+
+# Metadata
+classifier_version: "0.1"
+last_updated: "2025-11-28"
+notes: |
+  PLACEHOLDER - Not yet implemented.
+  Patterns need tuning based on real journal article documents.
+  Will be activated in Phase 4 when article support is added.

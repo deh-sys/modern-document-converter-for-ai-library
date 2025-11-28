@@ -1,0 +1,58 @@
+# Document Processor - Python Dependencies
+# Phase 1 and beyond
+
+# ============================================================================
+# TEXT EXTRACTION
+# ============================================================================
+pdfplumber>=0.10.0              # PDF text extraction (Python-native)
+python-docx>=1.1.0              # Word document parsing
+PyPDF2>=3.0.0                   # PDF metadata extraction
+clean-text>=0.6.0               # Text normalization (unicode, smart quotes, etc.)
+unidecode>=1.3.0                # Better unicode → ASCII conversion (used by clean-text)
+
+# ============================================================================
+# DATA VALIDATION & MODELS
+# ============================================================================
+pydantic>=2.5.0                 # Data models with validation
+
+# ============================================================================
+# CLI & USER INTERFACE
+# ============================================================================
+click>=8.1.0                    # CLI framework
+rich>=13.7.0                    # Terminal formatting & progress bars
+
+# ============================================================================
+# CONFIGURATION (Phase 3+)
+# ============================================================================
+pyyaml>=6.0                     # YAML configuration file parsing
+
+# ============================================================================
+# DATABASE (Built-in)
+# ============================================================================
+# sqlite3 - Built into Python, no installation needed
+
+# ============================================================================
+# DEVELOPMENT & TESTING
+# ============================================================================
+pytest>=7.4.0                   # Testing framework
+pytest-cov>=4.1.0               # Coverage reporting
+black>=23.12.0                  # Code formatting
+ruff>=0.1.9                     # Fast linting
+mypy>=1.7.0                     # Type checking
+
+# ============================================================================
+# OPTIONAL: Advanced Features (Future Phases)
+# ============================================================================
+# marker-pdf>=0.2.0             # AI-powered PDF → Markdown (Phase 3+)
+# ebooklib>=0.18                # EPUB/MOBI handling (Phase 3+)
+# pillow>=10.1.0                # Image extraction (Phase 3+)
+# pandas>=2.1.0                 # CSV export enhancement (optional)
+
+# ============================================================================
+# NOTES
+# ============================================================================
+# - pdfplumber replaces subprocess calls to pdftotext
+# - python-docx handles both .docx and (with LibreOffice) .doc conversion
+# - PyPDF2 for metadata only (pdfplumber handles text extraction)
+# - marker-pdf commented out for Phase 1 (simplicity)
+# - Install with: pip install -r requirements.txt

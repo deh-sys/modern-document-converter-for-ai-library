@@ -1,0 +1,167 @@
+# Statutes Document Type Classifier Rules
+#
+# This file defines patterns for identifying statutory documents (legislation, codes).
+#
+# Document Type: Statutes & Legislation
+# Examples: U.S. Code, State Codes, Regulations, Ordinances (O.C.G.A., U.S.C., C.F.R.)
+#
+# Confidence Calculation:
+#   - Sum all matched pattern weights
+#   - Negative patterns reduce score (e.g., case indicators)
+#   - Total score ranges from 0-100+
+
+document_type: statute
+
+# ENABLED: Statute detection is now active
+enabled: true
+
+# Pattern Matching Rules
+# Based on real-world testing with O.C.G.A. documents
+patterns:
+  # ========================================================================
+  # STRONG INDICATORS (High Weight)
+  # ========================================================================
+
+  - pattern: 'Official Code of'
+    description: "Official Code designation"
+    weight: 100
+    case_sensitive: false
+    notes: "TRUMP CARD - Definitive statute marker. If this exists, document IS a statute (even if annotated with cases)"
+
+  - pattern: '§'
+    description: "Section symbol"
+    weight: 35
+    case_sensitive: false
+    notes: "Universal statute section marker"
+
+  - pattern: 'O\.\s*C\.\s*G\.\s*A\.'
+    description: "O.C.G.A. (Official Code of Georgia Annotated) - spaced acronym"
+    weight: 30
+    case_sensitive: false
+    notes: "Regex allows optional whitespace between letters. Catches 'O. C. G. A.' or 'O.C.G.A.'"
+
+  - pattern: 'U\.\s*S\.\s*C\.'
+    description: "U.S.C. (United States Code) - spaced acronym"
+    weight: 30
+    case_sensitive: false
+    notes: "Federal code citation"
+
+  - pattern: 'C\.\s*F\.\s*R\.'
+    description: "C.F.R. (Code of Federal Regulations) - spaced acronym"
+    weight: 30
+    case_sensitive: false
+    notes: "Federal regulations"
+
+  # ========================================================================
+  # MEDIUM INDICATORS (Moderate Weight)
+  # ========================================================================
+
+  - pattern: 'TITLE\s+\d+'
+    description: "Title number (e.g., 'TITLE 42')"
+    weight: 50
+    case_sensitive: false
+    notes: "TRUMP CARD - Strong structural indicator of codified statute"
+
+  - pattern: 'Chapter\s+\d+'
+    description: "Chapter number"
+    weight: 15
+    case_sensitive: false
+
+  - pattern: '\bCode of\b'
+    description: "Code reference"
+    weight: 10
+    case_sensitive: false
+    notes: "Common in state codes"
+
+  # ========================================================================
+  # WEAK INDICATORS (Low Weight)
+  # ========================================================================
+
+  - pattern: '(?:Section|Sec\.)\s+\d+'
+    description: "Section number notation"
+    weight: 10
+    case_sensitive: false
+
+  - pattern: '§\s*\d+'
+    description: "Section symbol with number (e.g., '§ 1234')"
+    weight: 10
+    case_sensitive: false
+
+  - pattern: '\b(?:enacted|codified|amended)\b'
+    description: "Legislative action verbs"
+    weight: 5
+    case_sensitive: false
+
+  - pattern: 'Public Law|Pub\.\s*L\.'
+    description: "Public law citation"
+    weight: 5
+    case_sensitive: false
+
+  - pattern: '\b(?:subsection|subdivision|paragraph)\s*\([a-z0-9]+\)'
+    description: "Statutory subdivision notation"
+    weight: 5
+    case_sensitive: false
+    notes: "Format: 'subsection (a)' or 'paragraph (1)'"
+
+  # ========================================================================
+  # NEGATIVE INDICATORS (Reduce score - critical for avoiding false positives!)
+  # ========================================================================
+
+  - pattern: '\b\w+\s+v\.\s+\w+|\b\w+\s+versus\s+\w+'
+    description: "Case caption with 'v.' or 'versus' (indicates case, not statute)"
+    weight: -5
+    case_sensitive: false
+    notes: "Light negative - annotated codes cite many cases. Only slight penalty to distinguish from pure caselaw"
+
+  - pattern: 'Court of Appeals|Supreme Court|District Court|Circuit Court'
+    description: "Court name (indicates case, not statute)"
+    weight: -5
+    case_sensitive: false
+    notes: "Light negative - case annotations mention courts constantly"
+
+  - pattern: '\b(?:Plaintiff|Defendant|Appellant|Appellee|Petitioner)\b'
+    description: "Party designation (indicates case, not statute)"
+    weight: -5
+    case_sensitive: false
+    notes: "Light negative - appears in case annotations"
+
+  - pattern: '(?:Decided|Filed|Argued).*\d{4}'
+    description: "Decision date notation (indicates case, not statute)"
+    weight: -5
+    case_sensitive: false
+    notes: "Light negative - case citations have dates"
+
+  - pattern: '\b(?:Opinion|affirm|reverse|remand)\b'
+    description: "Judicial language (indicates case, not statute)"
+    weight: -5
+    case_sensitive: false
+    notes: "Light negative - appears in case annotations"
+
+# Confidence Thresholds
+# Map numeric scores to confidence levels
+confidence_thresholds:
+  high: 60      # Score >= 60 → HIGH confidence
+  medium: 30    # Score >= 30 → MEDIUM confidence
+  low: 10       # Score >= 10 → LOW confidence
+                # Score < 10  → Too low, return UNKNOWN
+
+# Metadata
+classifier_version: "1.0"
+last_updated: "2025-11-28"
+notes: |
+  Based on real-world testing with O.C.G.A. (Official Code of Georgia Annotated) documents.
+
+  Key Distinguishing Features:
+    - Statutes have section symbols (§), Title numbers, Code references
+    - Statutes use spaced acronyms (O. C. G. A., U. S. C., C. F. R.)
+    - Statutes describe law, cases interpret law
+
+  Negative Patterns:
+    - Essential for preventing false positives
+    - Cases frequently cite statutes, but presence of case indicators overrides
+    - If document has "v." and court names, it's a case citing statutes, not a statute
+
+  Tuning:
+    - Strong indicators (§, Official Code, spaced acronyms) = 105 points maximum
+    - Medium indicators (TITLE, Chapter, Code of) = 45 points
+    - Negative patterns can reduce score by up to 85 points if many case indicators present

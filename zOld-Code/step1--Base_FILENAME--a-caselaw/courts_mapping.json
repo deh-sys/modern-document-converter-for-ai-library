@@ -1,0 +1,274 @@
+{
+  "federal": {
+    "supreme_court": {
+      "patterns": [
+        "SUPREME COURT OF THE UNITED STATES",
+        "U\\.?S\\.? SUPREME COURT",
+        "UNITED STATES SUPREME COURT",
+        "Supreme Court of the United States"
+      ],
+      "code": "SCOTUS",
+      "full_name": "Supreme Court of the United States"
+    },
+    "circuit_courts": {
+      "1": {
+        "patterns": ["First Circuit", "1st Cir"],
+        "code": "1st-Cir",
+        "full_name": "U.S. Court of Appeals for the First Circuit"
+      },
+      "2": {
+        "patterns": ["Second Circuit", "2d Cir", "2nd Cir"],
+        "code": "2d-Cir",
+        "full_name": "U.S. Court of Appeals for the Second Circuit"
+      },
+      "3": {
+        "patterns": ["Third Circuit", "3d Cir", "3rd Cir"],
+        "code": "3d-Cir",
+        "full_name": "U.S. Court of Appeals for the Third Circuit"
+      },
+      "4": {
+        "patterns": ["Fourth Circuit", "4th Cir"],
+        "code": "4th-Cir",
+        "full_name": "U.S. Court of Appeals for the Fourth Circuit"
+      },
+      "5": {
+        "patterns": ["Fifth Circuit", "5th Cir"],
+        "code": "5th-Cir",
+        "full_name": "U.S. Court of Appeals for the Fifth Circuit"
+      },
+      "6": {
+        "patterns": ["Sixth Circuit", "6th Cir"],
+        "code": "6th-Cir",
+        "full_name": "U.S. Court of Appeals for the Sixth Circuit"
+      },
+      "7": {
+        "patterns": ["Seventh Circuit", "7th Cir"],
+        "code": "7th-Cir",
+        "full_name": "U.S. Court of Appeals for the Seventh Circuit"
+      },
+      "8": {
+        "patterns": ["Eighth Circuit", "8th Cir"],
+        "code": "8th-Cir",
+        "full_name": "U.S. Court of Appeals for the Eighth Circuit"
+      },
+      "9": {
+        "patterns": ["Ninth Circuit", "9th Cir"],
+        "code": "9th-Cir",
+        "full_name": "U.S. Court of Appeals for the Ninth Circuit"
+      },
+      "10": {
+        "patterns": ["Tenth Circuit", "10th Cir"],
+        "code": "10th-Cir",
+        "full_name": "U.S. Court of Appeals for the Tenth Circuit"
+      },
+      "11": {
+        "patterns": ["Eleventh Circuit", "11th Cir"],
+        "code": "11th-Cir",
+        "full_name": "U.S. Court of Appeals for the Eleventh Circuit"
+      },
+      "DC": {
+        "patterns": ["D\\.?C\\.? Circuit", "District of Columbia Circuit"],
+        "code": "DC-Cir",
+        "full_name": "U.S. Court of Appeals for the District of Columbia Circuit"
+      },
+      "Fed": {
+        "patterns": ["Federal Circuit"],
+        "code": "Fed-Cir",
+        "full_name": "U.S. Court of Appeals for the Federal Circuit"
+      }
+    },
+    "district_courts": {
+      "patterns": {
+        "multi_district": "(?:Northern|Southern|Eastern|Western|Middle) District of (\\w+)",
+        "single_district": "(?:United States )?District Court.{0,20}?for the District of (\\w+)"
+      },
+      "district_abbrev": {
+        "Northern": "ND",
+        "Southern": "SD",
+        "Eastern": "ED",
+        "Western": "WD",
+        "Middle": "MD"
+      },
+      "state_abbrev": {
+        "Alabama": "Ala",
+        "Alaska": "Alaska",
+        "Arizona": "Ariz",
+        "Arkansas": "Ark",
+        "California": "Cal",
+        "Colorado": "Colo",
+        "Connecticut": "Conn",
+        "Delaware": "Del",
+        "District of Columbia": "DC",
+        "Florida": "Fla",
+        "Georgia": "Ga",
+        "Hawaii": "Haw",
+        "Idaho": "Idaho",
+        "Illinois": "Ill",
+        "Indiana": "Ind",
+        "Iowa": "Iowa",
+        "Kansas": "Kan",
+        "Kentucky": "Ky",
+        "Louisiana": "La",
+        "Maine": "Me",
+        "Maryland": "Md",
+        "Massachusetts": "Mass",
+        "Michigan": "Mich",
+        "Minnesota": "Minn",
+        "Mississippi": "Miss",
+        "Missouri": "Mo",
+        "Montana": "Mont",
+        "Nebraska": "Neb",
+        "Nevada": "Nev",
+        "New Hampshire": "NH",
+        "New Jersey": "NJ",
+        "New Mexico": "NM",
+        "New York": "NY",
+        "North Carolina": "NC",
+        "North Dakota": "ND",
+        "Ohio": "Ohio",
+        "Oklahoma": "Okla",
+        "Oregon": "Or",
+        "Pennsylvania": "Pa",
+        "Puerto Rico": "PR",
+        "Rhode Island": "RI",
+        "South Carolina": "SC",
+        "South Dakota": "SD",
+        "Tennessee": "Tenn",
+        "Texas": "Tex",
+        "Utah": "Utah",
+        "Vermont": "Vt",
+        "Virginia": "Va",
+        "Virgin Islands": "VI",
+        "Washington": "Wash",
+        "West Virginia": "WVa",
+        "Wisconsin": "Wis",
+        "Wyoming": "Wyo"
+      }
+    }
+  },
+  "state": {
+    "Georgia": {
+      "supreme_court": {
+        "patterns": ["Supreme Court of Georgia", "Ga\\.? Supreme"],
+        "code": "GA-SC",
+        "full_name": "Supreme Court of Georgia"
+      },
+      "court_of_appeals": {
+        "patterns": ["Court of Appeals of Georgia", "Georgia Court of Appeals", "Ga\\.? App"],
+        "code": "GA-COA",
+        "full_name": "Court of Appeals of Georgia"
+      },
+      "superior_court": {
+        "patterns": ["Superior Court of (.+?) County"],
+        "code_template": "GA-Super-{county}",
+        "full_name_template": "Superior Court of {county} County, Georgia"
+      },
+      "state_court": {
+        "patterns": ["State Court of Georgia, (.+?) County", "State Court of (.+?) County"],
+        "code_template": "GA-State-{county}",
+        "full_name_template": "State Court of Georgia, {county} County"
+      }
+    },
+    "New York": {
+      "court_of_appeals": {
+        "patterns": ["New York Court of Appeals", "NY Court of Appeals"],
+        "code": "NY-CA",
+        "full_name": "New York Court of Appeals",
+        "note": "Highest court in NY"
+      },
+      "appellate_division": {
+        "patterns": ["Appellate Division.*?(First|Second|Third|Fourth) Department"],
+        "code_template": "NY-AD-{dept}",
+        "full_name_template": "Appellate Division, {dept} Department"
+      },
+      "supreme_court": {
+        "patterns": ["Supreme Court.*?(.+?) County", "NY Supreme Court.*?(.+?) County"],
+        "code_template": "NY-Sup-{county}",
+        "full_name_template": "Supreme Court, {county} County",
+        "note": "Trial level court in NY"
+      }
+    },
+    "California": {
+      "supreme_court": {
+        "patterns": ["Supreme Court of California", "California Supreme Court"],
+        "code": "CA-SC",
+        "full_name": "Supreme Court of California"
+      },
+      "court_of_appeal": {
+        "patterns": ["Court of Appeal.*?(First|Second|Third|Fourth|Fifth|Sixth) District"],
+        "code_template": "CA-CA-{district}",
+        "full_name_template": "California Court of Appeal, {district} District"
+      },
+      "superior_court": {
+        "patterns": ["Superior Court of California, County of (.+?)[,\\.]"],
+        "code_template": "CA-Super-{county}",
+        "full_name_template": "Superior Court of California, County of {county}"
+      }
+    },
+    "Texas": {
+      "supreme_court": {
+        "patterns": ["Supreme Court of Texas", "Texas Supreme Court"],
+        "code": "TX-SC",
+        "full_name": "Supreme Court of Texas",
+        "note": "Civil cases"
+      },
+      "court_of_criminal_appeals": {
+        "patterns": ["Texas Court of Criminal Appeals", "Court of Criminal Appeals of Texas"],
+        "code": "TX-CCA",
+        "full_name": "Texas Court of Criminal Appeals",
+        "note": "Criminal cases - highest court"
+      },
+      "courts_of_appeals": {
+        "patterns": ["Court of Appeals of Texas.*?(\\w+) District", "Texas Court of Appeals.*?(\\w+) District"],
+        "code_template": "TX-CA-{district}",
+        "full_name_template": "Court of Appeals of Texas, {district} District"
+      },
+      "district_court": {
+        "patterns": ["District Court.*?(.+?) County, Texas", "(.+?) County District Court"],
+        "code_template": "TX-Dist-{county}",
+        "full_name_template": "{county} County District Court, Texas"
+      }
+    },
+    "Florida": {
+      "supreme_court": {
+        "patterns": ["Supreme Court of Florida", "Florida Supreme Court"],
+        "code": "FL-SC",
+        "full_name": "Supreme Court of Florida"
+      },
+      "district_court_of_appeal": {
+        "patterns": ["District Court of Appeal.*?(First|Second|Third|Fourth|Fifth) District"],
+        "code_template": "FL-DCA-{district}",
+        "full_name_template": "District Court of Appeal of Florida, {district} District"
+      },
+      "circuit_court": {
+        "patterns": ["Circuit Court.*?(.+?) County", "(.+?) County Circuit Court"],
+        "code_template": "FL-Cir-{county}",
+        "full_name_template": "Circuit Court, {county} County, Florida"
+      }
+    }
+  },
+  "filename_hints": {
+    "GA SC": "GA-SC",
+    "GA COA": "GA-COA",
+    "GA App": "GA-COA",
+    "Ga App": "GA-COA",
+    "Ga": "GA-SC",
+    "ND Ill": "ND-Ill",
+    "SD NY": "SD-NY",
+    "ED Va": "ED-Va",
+    "CD Cal": "CD-Cal",
+    "WD Tex": "WD-Tex",
+    "1st Cir": "1st-Cir",
+    "2d Cir": "2d-Cir",
+    "3d Cir": "3d-Cir",
+    "4th Cir": "4th-Cir",
+    "5th Cir": "5th-Cir",
+    "6th Cir": "6th-Cir",
+    "7th Cir": "7th-Cir",
+    "8th Cir": "8th-Cir",
+    "9th Cir": "9th-Cir",
+    "10th Cir": "10th-Cir",
+    "11th Cir": "11th-Cir",
+    "DC Cir": "DC-Cir"
+  }
+}

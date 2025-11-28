@@ -1,0 +1,495 @@
+{
+  "reporters": {
+    "federal": {
+      "supreme_court": [
+        {
+          "abbreviation": "U.S.",
+          "full_name": "United States Reports",
+          "pattern": "\\d+\\s+U\\.S\\.\\s+\\d+",
+          "priority": 1,
+          "official": true,
+          "filename_format": "U.S."
+        },
+        {
+          "abbreviation": "S.Ct.",
+          "full_name": "Supreme Court Reporter",
+          "pattern": "\\d+\\s+S\\.\\s*Ct\\.\\s+\\d+",
+          "priority": 2,
+          "official": false,
+          "filename_format": "S.Ct."
+        },
+        {
+          "abbreviation": "L.Ed.",
+          "full_name": "United States Supreme Court Reports, Lawyers' Edition",
+          "pattern": "\\d+\\s+L\\.\\s*Ed\\.\\s+\\d+",
+          "priority": 3,
+          "official": false,
+          "filename_format": "L.Ed."
+        },
+        {
+          "abbreviation": "L.Ed.2d",
+          "full_name": "United States Supreme Court Reports, Lawyers' Edition, Second Series",
+          "pattern": "\\d+\\s+L\\.\\s*Ed\\.\\s*2d\\s+\\d+",
+          "priority": 3,
+          "official": false,
+          "filename_format": "L.Ed.2d"
+        }
+      ],
+      "courts_of_appeals": [
+        {
+          "abbreviation": "F.",
+          "full_name": "Federal Reporter",
+          "pattern": "\\d+\\s+F\\.\\s+\\d+",
+          "priority": 1,
+          "years": "1880-1924",
+          "filename_format": "F."
+        },
+        {
+          "abbreviation": "F.2d",
+          "full_name": "Federal Reporter, Second Series",
+          "pattern": "\\d+\\s+F\\.2d\\s+\\d+",
+          "priority": 1,
+          "years": "1924-1993",
+          "filename_format": "F.2d"
+        },
+        {
+          "abbreviation": "F.3d",
+          "full_name": "Federal Reporter, Third Series",
+          "pattern": "\\d+\\s+F\\.3d\\s+\\d+",
+          "priority": 1,
+          "years": "1993-2021",
+          "filename_format": "F.3d"
+        },
+        {
+          "abbreviation": "F.4th",
+          "full_name": "Federal Reporter, Fourth Series",
+          "pattern": "\\d+\\s+F\\.4th\\s+\\d+",
+          "priority": 1,
+          "years": "2021-present",
+          "filename_format": "F.4th"
+        },
+        {
+          "abbreviation": "Fed.Appx.",
+          "full_name": "Federal Appendix",
+          "pattern": "\\d+\\s+Fed\\.\\s*Appx\\.\\s+\\d+",
+          "priority": 2,
+          "note": "Unpublished decisions",
+          "filename_format": "Fed.Appx."
+        }
+      ],
+      "district_courts": [
+        {
+          "abbreviation": "F.Supp.",
+          "full_name": "Federal Supplement",
+          "pattern": "\\d+\\s+F\\.\\s*Supp\\.\\s+\\d+",
+          "priority": 1,
+          "years": "1932-1998",
+          "filename_format": "F.Supp."
+        },
+        {
+          "abbreviation": "F.Supp.2d",
+          "full_name": "Federal Supplement, Second Series",
+          "pattern": "\\d+\\s+F\\.\\s*Supp\\.\\s*2d\\s+\\d+",
+          "priority": 1,
+          "years": "1998-2014",
+          "filename_format": "F.Supp.2d"
+        },
+        {
+          "abbreviation": "F.Supp.3d",
+          "full_name": "Federal Supplement, Third Series",
+          "pattern": "\\d+\\s+F\\.\\s*Supp\\.\\s*3d\\s+\\d+",
+          "priority": 1,
+          "years": "2014-present",
+          "filename_format": "F.Supp.3d"
+        },
+        {
+          "abbreviation": "F.R.D.",
+          "full_name": "Federal Rules Decisions",
+          "pattern": "\\d+\\s+F\\.R\\.D\\.\\s+\\d+",
+          "priority": 2,
+          "note": "Decisions on federal rules",
+          "filename_format": "F.R.D."
+        }
+      ],
+      "bankruptcy": [
+        {
+          "abbreviation": "B.R.",
+          "full_name": "Bankruptcy Reporter",
+          "pattern": "\\d+\\s+B\\.R\\.\\s+\\d+",
+          "priority": 1,
+          "filename_format": "B.R."
+        }
+      ],
+      "claims": [
+        {
+          "abbreviation": "Fed.Cl.",
+          "full_name": "Federal Claims Reporter",
+          "pattern": "\\d+\\s+Fed\\.\\s*Cl\\.\\s+\\d+",
+          "priority": 1,
+          "filename_format": "Fed.Cl."
+        }
+      ]
+    },
+    "regional": {
+      "atlantic": [
+        {
+          "abbreviation": "A.",
+          "full_name": "Atlantic Reporter",
+          "pattern": "\\d+\\s+A\\.\\s+\\d+",
+          "states": ["CT", "DE", "ME", "MD", "NH", "NJ", "PA", "RI", "VT", "DC"],
+          "priority": 1,
+          "years": "1885-1938",
+          "filename_format": "A."
+        },
+        {
+          "abbreviation": "A.2d",
+          "full_name": "Atlantic Reporter, Second Series",
+          "pattern": "\\d+\\s+A\\.2d\\s+\\d+",
+          "states": ["CT", "DE", "ME", "MD", "NH", "NJ", "PA", "RI", "VT", "DC"],
+          "priority": 1,
+          "years": "1938-2010",
+          "filename_format": "A.2d"
+        },
+        {
+          "abbreviation": "A.3d",
+          "full_name": "Atlantic Reporter, Third Series",
+          "pattern": "\\d+\\s+A\\.3d\\s+\\d+",
+          "states": ["CT", "DE", "ME", "MD", "NH", "NJ", "PA", "RI", "VT", "DC"],
+          "priority": 1,
+          "years": "2010-present",
+          "filename_format": "A.3d"
+        }
+      ],
+      "north_eastern": [
+        {
+          "abbreviation": "N.E.",
+          "full_name": "North Eastern Reporter",
+          "pattern": "\\d+\\s+N\\.E\\.\\s+\\d+",
+          "states": ["IL", "IN", "MA", "NY", "OH"],
+          "priority": 1,
+          "years": "1885-1936",
+          "filename_format": "N.E."
+        },
+        {
+          "abbreviation": "N.E.2d",
+          "full_name": "North Eastern Reporter, Second Series",
+          "pattern": "\\d+\\s+N\\.E\\.2d\\s+\\d+",
+          "states": ["IL", "IN", "MA", "NY", "OH"],
+          "priority": 1,
+          "years": "1936-2012",
+          "filename_format": "N.E.2d"
+        },
+        {
+          "abbreviation": "N.E.3d",
+          "full_name": "North Eastern Reporter, Third Series",
+          "pattern": "\\d+\\s+N\\.E\\.3d\\s+\\d+",
+          "states": ["IL", "IN", "MA", "NY", "OH"],
+          "priority": 1,
+          "years": "2012-present",
+          "filename_format": "N.E.3d"
+        }
+      ],
+      "north_western": [
+        {
+          "abbreviation": "N.W.",
+          "full_name": "North Western Reporter",
+          "pattern": "\\d+\\s+N\\.W\\.\\s+\\d+",
+          "states": ["IA", "MI", "MN", "NE", "ND", "SD", "WI"],
+          "priority": 1,
+          "years": "1879-1941",
+          "filename_format": "N.W."
+        },
+        {
+          "abbreviation": "N.W.2d",
+          "full_name": "North Western Reporter, Second Series",
+          "pattern": "\\d+\\s+N\\.W\\.2d\\s+\\d+",
+          "states": ["IA", "MI", "MN", "NE", "ND", "SD", "WI"],
+          "priority": 1,
+          "years": "1941-present",
+          "filename_format": "N.W.2d"
+        }
+      ],
+      "pacific": [
+        {
+          "abbreviation": "P.",
+          "full_name": "Pacific Reporter",
+          "pattern": "\\d+\\s+P\\.\\s+\\d+",
+          "states": ["AK", "AZ", "CA", "CO", "HI", "ID", "KS", "MT", "NV", "NM", "OK", "OR", "UT", "WA", "WY"],
+          "priority": 1,
+          "years": "1883-1931",
+          "filename_format": "P."
+        },
+        {
+          "abbreviation": "P.2d",
+          "full_name": "Pacific Reporter, Second Series",
+          "pattern": "\\d+\\s+P\\.2d\\s+\\d+",
+          "states": ["AK", "AZ", "CA", "CO", "HI", "ID", "KS", "MT", "NV", "NM", "OK", "OR", "UT", "WA", "WY"],
+          "priority": 1,
+          "years": "1931-2000",
+          "filename_format": "P.2d"
+        },
+        {
+          "abbreviation": "P.3d",
+          "full_name": "Pacific Reporter, Third Series",
+          "pattern": "\\d+\\s+P\\.3d\\s+\\d+",
+          "states": ["AK", "AZ", "CA", "CO", "HI", "ID", "KS", "MT", "NV", "NM", "OK", "OR", "UT", "WA", "WY"],
+          "priority": 1,
+          "years": "2000-present",
+          "filename_format": "P.3d"
+        }
+      ],
+      "south_eastern": [
+        {
+          "abbreviation": "S.E.",
+          "full_name": "South Eastern Reporter",
+          "pattern": "\\d+\\s+S\\.E\\.\\s+\\d+",
+          "states": ["GA", "NC", "SC", "VA", "WV"],
+          "priority": 1,
+          "years": "1887-1939",
+          "filename_format": "S.E."
+        },
+        {
+          "abbreviation": "S.E.2d",
+          "full_name": "South Eastern Reporter, Second Series",
+          "pattern": "\\d+\\s+S\\.E\\.2d\\s+\\d+",
+          "states": ["GA", "NC", "SC", "VA", "WV"],
+          "priority": 1,
+          "years": "1939-present",
+          "filename_format": "S.E.2d"
+        }
+      ],
+      "southern": [
+        {
+          "abbreviation": "So.",
+          "full_name": "Southern Reporter",
+          "pattern": "\\d+\\s+So\\.\\s+\\d+",
+          "states": ["AL", "FL", "LA", "MS"],
+          "priority": 1,
+          "years": "1887-1941",
+          "filename_format": "So."
+        },
+        {
+          "abbreviation": "So.2d",
+          "full_name": "Southern Reporter, Second Series",
+          "pattern": "\\d+\\s+So\\.2d\\s+\\d+",
+          "states": ["AL", "FL", "LA", "MS"],
+          "priority": 1,
+          "years": "1941-2008",
+          "filename_format": "So.2d"
+        },
+        {
+          "abbreviation": "So.3d",
+          "full_name": "Southern Reporter, Third Series",
+          "pattern": "\\d+\\s+So\\.3d\\s+\\d+",
+          "states": ["AL", "FL", "LA", "MS"],
+          "priority": 1,
+          "years": "2008-present",
+          "filename_format": "So.3d"
+        }
+      ],
+      "south_western": [
+        {
+          "abbreviation": "S.W.",
+          "full_name": "South Western Reporter",
+          "pattern": "\\d+\\s+S\\.W\\.\\s+\\d+",
+          "states": ["AR", "KY", "MO", "TN", "TX"],
+          "priority": 1,
+          "years": "1886-1928",
+          "filename_format": "S.W."
+        },
+        {
+          "abbreviation": "S.W.2d",
+          "full_name": "South Western Reporter, Second Series",
+          "pattern": "\\d+\\s+S\\.W\\.2d\\s+\\d+",
+          "states": ["AR", "KY", "MO", "TN", "TX"],
+          "priority": 1,
+          "years": "1928-1999",
+          "filename_format": "S.W.2d"
+        },
+        {
+          "abbreviation": "S.W.3d",
+          "full_name": "South Western Reporter, Third Series",
+          "pattern": "\\d+\\s+S\\.W\\.3d\\s+\\d+",
+          "states": ["AR", "KY", "MO", "TN", "TX"],
+          "priority": 1,
+          "years": "1999-present",
+          "filename_format": "S.W.3d"
+        }
+      ]
+    },
+    "state_specific": {
+      "Georgia": [
+        {
+          "abbreviation": "Ga.",
+          "full_name": "Georgia Reports",
+          "pattern": "\\d+\\s+Ga\\.\\s+\\d+",
+          "court": "Supreme Court of Georgia",
+          "priority": 1,
+          "official": true,
+          "filename_format": "Ga."
+        },
+        {
+          "abbreviation": "Ga.App.",
+          "full_name": "Georgia Appeals Reports",
+          "pattern": "\\d+\\s+Ga\\.\\s*App\\.\\s+\\d+",
+          "court": "Court of Appeals of Georgia",
+          "priority": 1,
+          "official": true,
+          "filename_format": "Ga.App."
+        }
+      ],
+      "California": [
+        {
+          "abbreviation": "Cal.",
+          "full_name": "California Reports",
+          "pattern": "\\d+\\s+Cal\\.\\s+\\d+",
+          "court": "Supreme Court of California",
+          "priority": 1,
+          "official": true,
+          "filename_format": "Cal."
+        },
+        {
+          "abbreviation": "Cal.App.",
+          "full_name": "California Appellate Reports",
+          "pattern": "\\d+\\s+Cal\\.\\s*App\\.\\s+\\d+",
+          "court": "California Courts of Appeal",
+          "priority": 1,
+          "official": true,
+          "filename_format": "Cal.App."
+        },
+        {
+          "abbreviation": "Cal.Rptr.",
+          "full_name": "California Reporter",
+          "pattern": "\\d+\\s+Cal\\.\\s*Rptr\\.\\s+\\d+",
+          "priority": 2,
+          "filename_format": "Cal.Rptr."
+        },
+        {
+          "abbreviation": "Cal.Rptr.2d",
+          "full_name": "California Reporter, Second Series",
+          "pattern": "\\d+\\s+Cal\\.\\s*Rptr\\.2d\\s+\\d+",
+          "priority": 2,
+          "filename_format": "Cal.Rptr.2d"
+        },
+        {
+          "abbreviation": "Cal.Rptr.3d",
+          "full_name": "California Reporter, Third Series",
+          "pattern": "\\d+\\s+Cal\\.\\s*Rptr\\.3d\\s+\\d+",
+          "priority": 2,
+          "filename_format": "Cal.Rptr.3d"
+        }
+      ],
+      "New York": [
+        {
+          "abbreviation": "N.Y.",
+          "full_name": "New York Reports",
+          "pattern": "\\d+\\s+N\\.Y\\.\\s+\\d+",
+          "court": "New York Court of Appeals",
+          "priority": 1,
+          "official": true,
+          "filename_format": "N.Y."
+        },
+        {
+          "abbreviation": "N.Y.S.",
+          "full_name": "New York Supplement",
+          "pattern": "\\d+\\s+N\\.Y\\.S\\.\\s+\\d+",
+          "priority": 2,
+          "years": "1888-1937",
+          "filename_format": "N.Y.S."
+        },
+        {
+          "abbreviation": "N.Y.S.2d",
+          "full_name": "New York Supplement, Second Series",
+          "pattern": "\\d+\\s+N\\.Y\\.S\\.2d\\s+\\d+",
+          "priority": 2,
+          "years": "1937-2005",
+          "filename_format": "N.Y.S.2d"
+        },
+        {
+          "abbreviation": "N.Y.S.3d",
+          "full_name": "New York Supplement, Third Series",
+          "pattern": "\\d+\\s+N\\.Y\\.S\\.3d\\s+\\d+",
+          "priority": 2,
+          "years": "2005-present",
+          "filename_format": "N.Y.S.3d"
+        }
+      ],
+      "Texas": [
+        {
+          "abbreviation": "Tex.",
+          "full_name": "Texas Reports",
+          "pattern": "\\d+\\s+Tex\\.\\s+\\d+",
+          "court": "Supreme Court of Texas",
+          "priority": 1,
+          "official": true,
+          "filename_format": "Tex."
+        }
+      ],
+      "Florida": [
+        {
+          "abbreviation": "Fla.",
+          "full_name": "Florida Reports",
+          "pattern": "\\d+\\s+Fla\\.\\s+\\d+",
+          "court": "Supreme Court of Florida",
+          "priority": 1,
+          "official": true,
+          "filename_format": "Fla."
+        }
+      ]
+    },
+    "online_databases": [
+      {
+        "abbreviation": "U.S.Dist.LEXIS",
+        "full_name": "LexisNexis - U.S. District Courts",
+        "pattern": "U\\.S\\.\\s*Dist\\.\\s*LEXIS\\s+\\d+",
+        "priority": 3,
+        "note": "Online only - no print reporter",
+        "filename_format": "U.S.Dist.LEXIS"
+      },
+      {
+        "abbreviation": "U.S.App.LEXIS",
+        "full_name": "LexisNexis - U.S. Courts of Appeals",
+        "pattern": "U\\.S\\.\\s*App\\.\\s*LEXIS\\s+\\d+",
+        "priority": 3,
+        "note": "Online only - no print reporter",
+        "filename_format": "U.S.App.LEXIS"
+      },
+      {
+        "abbreviation": "LEXIS",
+        "full_name": "LexisNexis (generic)",
+        "pattern": "LEXIS\\s+\\d+",
+        "priority": 4,
+        "note": "Generic LEXIS citation",
+        "filename_format": "LEXIS"
+      },
+      {
+        "abbreviation": "WL",
+        "full_name": "Westlaw",
+        "pattern": "\\d{4}\\s+WL\\s+\\d+",
+        "priority": 4,
+        "note": "Westlaw unique identifier",
+        "filename_format": "WL"
+      }
+    ],
+    "fallback": {
+      "unreported": {
+        "abbreviation": "Unpub",
+        "full_name": "Unreported / Unpublished",
+        "use_when": "No reporter citation found and case is not available in print reporters",
+        "filename_format": "Unpub"
+      }
+    }
+  },
+  "extraction_priority": [
+    "State-specific official reporters (priority 1)",
+    "Regional reporters (priority 1)",
+    "Federal print reporters (priority 1-2)",
+    "Online databases (priority 3-4)",
+    "Unreported/Unpublished (fallback)"
+  ],
+  "notes": {
+    "parallel_citations": "Many cases have multiple citations (e.g., reported in both official and regional reporters). Prefer official reporters when available, then regional reporters.",
+    "online_vs_print": "LEXIS and Westlaw citations should only be used if no print reporter citation is available.",
+    "unpublished": "Recent cases and lower court cases may not have print reporter citations."
+  }
+}

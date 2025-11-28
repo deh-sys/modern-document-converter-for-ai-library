@@ -1,0 +1,121 @@
+# Caselaw Document Type Classifier Rules
+#
+# This file defines patterns for identifying legal case documents.
+# Patterns are matched against extracted document text and scored.
+#
+# Document Type: Legal Cases (judicial opinions, court decisions)
+# Examples: Trial court decisions, appellate opinions, supreme court cases
+#
+# Confidence Calculation:
+#   - Sum all matched pattern weights
+#   - Total score ranges from 0-100+
+#   - Threshold determines confidence level (HIGH/MEDIUM/LOW)
+
+document_type: caselaw
+
+# Pattern Matching Rules
+# Each pattern contributes weight to the total confidence score
+patterns:
+  # ========================================================================
+  # STRONG INDICATORS (High Weight)
+  # ========================================================================
+
+  - pattern: '\b\w+\s+v\.\s+\w+|\b\w+\s+versus\s+\w+'
+    description: "Case caption with 'v.' or 'versus'"
+    weight: 40
+    case_sensitive: false
+    notes: "Nearly universal in US case law"
+
+  - pattern: '\d+\s+[A-Z][a-z]+\.?\s+(?:App\.\s+)?(?:2d|3d)?\s*\d+'
+    description: "Reporter citation format (e.g., '328 Ga. App. 524', '759 S.E.2d 654')"
+    weight: 35
+    case_sensitive: false
+    notes: "Standard legal citation format"
+
+  # ========================================================================
+  # MEDIUM INDICATORS (Moderate Weight)
+  # ========================================================================
+
+  - pattern: 'Court of Appeals|Supreme Court|District Court|Circuit Court|Superior Court|Appellate Court'
+    description: "Court name"
+    weight: 20
+    case_sensitive: false
+
+  - pattern: '\b(?:LEXIS|Westlaw|WL\s+\d+|West\s+Law)\b'
+    description: "Legal database citation"
+    weight: 15
+    case_sensitive: false
+    notes: "Common in published opinions"
+
+  - pattern: '\b(?:Plaintiff|Defendant|Appellant|Appellee|Petitioner|Respondent)\b'
+    description: "Party designation"
+    weight: 10
+    case_sensitive: false
+
+  - pattern: '(?:Decided|Filed|Argued).*\d{4}'
+    description: "Decision date notation"
+    weight: 10
+    case_sensitive: false
+    notes: "Format: 'Decided July 3, 2014' or 'Filed: October 9, 2024'"
+
+  # ========================================================================
+  # WEAK INDICATORS (Low Weight)
+  # ========================================================================
+
+  - pattern: '\b(?:Opinion|Judgment|ORDER|MOTION|Memorandum|Per Curiam)\b'
+    description: "Legal procedural terms"
+    weight: 5
+    case_sensitive: true
+    notes: "Common but not exclusive to caselaw"
+
+  - pattern: '\b(?:affirm|reverse|remand|vacate|dismiss)(?:ed|ing)?\b'
+    description: "Judicial action verbs"
+    weight: 5
+    case_sensitive: false
+
+  - pattern: 'Case\s+No\.|Docket\s+No\.|Civil\s+Action\s+No\.'
+    description: "Case/docket number"
+    weight: 5
+    case_sensitive: false
+
+  - pattern: '\bJ\.,\s+(?:concurring|dissenting|delivering the opinion)'
+    description: "Judge attribution"
+    weight: 5
+    case_sensitive: false
+    notes: "Format: 'Smith, J., concurring'"
+
+  - pattern: 'This case comes before (the court|us)'
+    description: "Procedural history opening"
+    weight: 3
+    case_sensitive: false
+
+  # ========================================================================
+  # NEGATIVE INDICATORS (Reduce score)
+  # ========================================================================
+
+  - pattern: '\b(?:Section|§)\s+\d+|\bU\.S\.C\.|United States Code'
+    description: "Statutory citation (suggests statute, not case)"
+    weight: -10
+    case_sensitive: false
+    notes: "Negative weight - cases cite statutes but statutes are primary source"
+
+# Confidence Thresholds
+# Map numeric scores to confidence levels
+confidence_thresholds:
+  high: 60      # Score >= 60 → HIGH confidence
+  medium: 30    # Score >= 30 → MEDIUM confidence
+  low: 10       # Score >= 10 → LOW confidence
+                # Score < 10  → Too low, return UNKNOWN
+
+# Metadata
+classifier_version: "1.0"
+last_updated: "2025-11-28"
+notes: |
+  Based on analysis of real case documents from LexisNexis and Westlaw.
+  Patterns tested against Georgia Court of Appeals opinions and federal district court cases.
+
+  Tuning:
+    - Strong indicators (v., reporter citations) = 75 points combined
+    - Medium indicators (court names, party designations) = 55 points combined
+    - Multiple weak indicators can push to MEDIUM confidence
+    - Negative indicators (statutory citations) reduce false positives

@@ -1,0 +1,94 @@
+[
+  {
+    "filename": "Abbott Labs. v. Sandoz, Inc (ND Ill 2010).pdf",
+    "filename_components": {
+      "prefix": null,
+      "case_name": "Abbott Labs. v. Sandoz, Inc",
+      "court_from_filename": "ND Ill",
+      "year_from_filename": "2010",
+      "reporter_from_filename": null
+    },
+    "pdf_info": {
+      "court": "United States District Court for the Northern District of Illinois, Eastern Division\nMay 24, 2010, Decided; May 24, 2010, Filed\nNo. 05 C 5373",
+      "date": "May 24, 2010",
+      "reporter_citation": "743 F. Supp. 2d 762"
+    }
+  },
+  {
+    "filename": "Alden v. Me._Attachment1 (1st Cir 1999).pdf",
+    "filename_components": {
+      "prefix": null,
+      "case_name": "Alden v. Me.",
+      "court_from_filename": "1st Cir",
+      "year_from_filename": "1999",
+      "reporter_from_filename": null
+    },
+    "pdf_info": {
+      "court": "U.S. SUPREME COURT REPORTS                   144 L Ed 2d\n[527 US 706]\nJOHN H. ALDEN, et al., Petitioners",
+      "date": "June 23, 1999",
+      "reporter_citation": null
+    }
+  },
+  {
+    "filename": "Allan v. United States_ 2019 U.S. Dist. LEXIS 123570.pdf",
+    "filename_components": {
+      "prefix": null,
+      "case_name": "Allan v. United States",
+      "court_from_filename": null,
+      "year_from_filename": "2019",
+      "reporter_from_filename": "U.S. Dist. LEXIS"
+    },
+    "pdf_info": {
+      "court": "United States District Court for the Eastern District of Virginia, Alexandria Division\nJuly 23, 2019, Decided; July 23, 2019, Filed\n1:18-cv-821 (LMB/MSN)",
+      "date": "July 23, 2019",
+      "reporter_citation": "U.S. Dist. LEXIS 123570"
+    }
+  },
+  {
+    "filename": "Landrum v. Verg Enters., LLC (State Ct Fulton County 2024).pdf",
+    "filename_components": {
+      "prefix": null,
+      "case_name": "Landrum v. Verg Enters., LLC",
+      "court_from_filename": "State Ct Fulton County",
+      "year_from_filename": "2024",
+      "reporter_from_filename": null
+    },
+    "pdf_info": {
+      "court": "State Court of Georgia, Fulton County\nSeptember 24, 2024, Decided; September 24, 2024, Filed\nNO. 24EV002714",
+      "date": "September 24, 2024",
+      "reporter_citation": null
+    }
+  },
+  {
+    "filename": "law - GA COA - Adams v. State (Ga App 2000).pdf",
+    "filename_components": {
+      "prefix": "law",
+      "case_name": "Adams v. State",
+      "court_from_filename": "Ga App",
+      "year_from_filename": "2000",
+      "reporter_from_filename": null,
+      "jurisdiction_hint": "GA COA"
+    },
+    "pdf_info": {
+      "court": "Court of Appeals of Georgia\nMay 10, 2000, Decided\nA00A0178.",
+      "date": "May 10, 2000",
+      "reporter_citation": "534 S.E.2d 538"
+    }
+  },
+  {
+    "filename": "law - GA SC - Agee v. State (Ga 2003).pdf",
+    "filename_components": {
+      "prefix": "law",
+      "case_name": "Agee v. State",
+      "court_from_filename": "Ga",
+      "year_from_filename": "2003",
+      "reporter_from_filename": null,
+      "jurisdiction_hint": "GA SC"
+    },
+    "pdf_info": {
+      "court": "Supreme Court of Georgia\nApril 29, 2003, Decided\nS03A0508",
+      "date": "April 29, 2003",
+      "reporter_citation": "579 S.E.2d 730"
+    }
+  }
+]
