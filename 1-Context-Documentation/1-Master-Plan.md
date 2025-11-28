@@ -90,20 +90,27 @@ Each step:
 
 ## Phased Implementation Strategy
 
-### Phase 1: Core Services Foundation (Week 1) - IN PROGRESS ⚙️
+### Phase 1: Core Services Foundation (Week 1) ✅ COMPLETE
 **Goal:** Build the shared infrastructure that all document types will use.
 
 **Deliverables:**
-1. ✅ `services/text_extractor.py` - PDF/DOCX → plain text using pdfplumber/python-docx
+1. ✅ `services/text_extractor.py` - PDF/DOCX → plain text using pdfplumber/python-docx (335 lines)
    - COMPLETE: Strategy pattern with pdfplumber (layout=True) and python-docx
    - COMPLETE: Text normalizer with clean-text + custom hyphen fixing for legal docs
    - COMPLETE: ExtractionResult model for type-safe error handling
    - COMPLETE: Smoke test tool (`smoke_test_extractor.py`)
+   - TESTED: 43K+ and 126K+ character extractions successful
 
-2. ⏳ `services/registrar.py` - SQLite operations (schema design, CRUD operations)
-   - PENDING: Next task to implement
+2. ✅ `services/registrar.py` - SQLite operations with WAL mode (653 lines)
+   - COMPLETE: 5-table schema (documents, codes, metadata, processing_steps, registry_state)
+   - COMPLETE: Code management (allocate, commit, rollback with atomic operations)
+   - COMPLETE: Document tracking (register, query by path/code/id, update)
+   - COMPLETE: Metadata storage (flexible key-value with provenance)
+   - COMPLETE: Processing step history
+   - COMPLETE: Transaction support and foreign key constraints
+   - COMPLETE: Statistics and JSON export
 
-3. ✅ `services/classifier.py` - Document type detection (YAML-driven pattern matching)
+3. ✅ `services/classifier.py` - Document type detection (YAML-driven pattern matching) (405 lines)
    - COMPLETE: YAML-driven classification system (no hardcoded keywords)
    - COMPLETE: Weighted scoring with positive and negative patterns
    - COMPLETE: Confidence levels (HIGH/MEDIUM/LOW) with configurable thresholds
@@ -112,16 +119,21 @@ Each step:
    - COMPLETE: Statute detection with Trump Card philosophy (205 points, handles annotated codes)
    - COMPLETE: Smoke test tool with `--show-scores` flag (`smoke_test_classifier.py`)
 
-4. ⏳ `services/code_generator.py` - Base-25 unique code logic (port from step2)
-   - PENDING: After registrar service
+4. ✅ `services/code_generator.py` - Base-25 unique code logic with legacy compatibility (546 lines)
+   - COMPLETE: Exact port of base-25 algorithm from legacy system
+   - COMPLETE: Discovery logic (preserves existing codes, generates new when needed)
+   - COMPLETE: Validation (5 chars, uppercase, no 'W' character)
+   - COMPLETE: Filename utilities (extract, append, validate codes)
+   - COMPLETE: Smoke test tool with 6 test scenarios (`smoke_test_registry.py`)
+   - TESTED: Legacy code preservation, invalid code handling, rollback functionality
 
 **Success Criteria:**
-- ✅ Can extract text from any PDF/DOCX file (tested with 43K char, 13 page PDF)
-- ✅ Can classify document type with confidence scores (caselaw and statutes working)
-- ⏳ Can save metadata to SQLite registry (pending)
-- ⏳ Can generate and track unique codes (pending)
+- ✅ Can extract text from any PDF/DOCX file (tested with 43K and 126K char PDFs)
+- ✅ Can classify document type with confidence scores (caselaw: 140pts, statutes: 205pts)
+- ✅ Can save metadata to SQLite registry (registry/master.db with WAL mode)
+- ✅ Can generate and track unique codes (base-25, 9.7M capacity, legacy compatible)
 
-**Status:** 2 of 4 services complete (50%)
+**Status:** ✅ 4 of 4 services complete (100%) - **PHASE 1 COMPLETE**
 
 ### Phase 2: Caselaw End-to-End (Week 2)
 **Goal:** Complete working pipeline for one document type (caselaw).
@@ -223,12 +235,14 @@ Each step:
 
 ## Success Metrics
 
-### Phase 1 Success
-- [x] Can extract text from sample PDFs without errors (tested: Indian_Trail.pdf, OCGA statute)
-- [x] Document classification works for caselaw and statutes with HIGH confidence
+### Phase 1 Success ✅ ALL CRITERIA MET
+- [x] Can extract text from sample PDFs without errors (tested: Indian_Trail.pdf 43K chars, OCGA statute 126K chars)
+- [x] Document classification works for caselaw and statutes with HIGH confidence (140pts and 205pts)
 - [x] YAML-driven patterns allow tuning without code changes (Trump Card implementation proved this)
-- [ ] SQLite registry tracks all files and operations
-- [ ] Unique codes generate without collisions
+- [x] SQLite registry tracks all files and operations (registry/master.db with 5 tables, WAL mode)
+- [x] Unique codes generate without collisions (base-25 algorithm, Primary Key constraint on codes table)
+- [x] Legacy compatibility verified (249K+ code continuity, discovery logic, validation)
+- [x] All smoke tests passing (3 test suites, 100% pass rate)
 
 ### Phase 2 Success
 - [ ] Process step1a sample_files/ folder end-to-end
@@ -283,6 +297,7 @@ Each step:
 
 ---
 
-**Document Version:** 1.1
+**Document Version:** 2.0
 **Last Updated:** 2025-11-28
-**Status:** Phase 1 In Progress (2 of 4 services complete)
+**Status:** Phase 1 Complete ✅ - All 4 core services implemented and tested
+**Next:** Phase 2 - Caselaw End-to-End Pipeline

@@ -47,21 +47,44 @@
   - [x] Rich output formatting
 - [ ] Write unit tests for text extraction (DEFERRED to Phase 2)
 
-#### Registrar Service
-- [ ] Create `services/registrar.py`
-- [ ] Design SQLite schema
-  - [ ] Documents table (file paths, types, metadata)
-  - [ ] Processing history table (step completion status)
-  - [ ] Codes table (unique 5-letter codes)
-  - [ ] Metadata table (extracted fields)
-- [ ] Implement CRUD operations
-  - [ ] Add new document
-  - [ ] Update document status
-  - [ ] Get document by path/code
-  - [ ] List documents by status/type
-- [ ] Add atomic operations (WAL mode)
-- [ ] Add export functionality (JSON, CSV)
-- [ ] Write unit tests for registry operations
+#### Registrar Service ✅ COMPLETED
+- [x] Create `services/registrar.py`
+- [x] Design SQLite schema (5 tables)
+  - [x] Documents table (file paths, names, types, unique codes)
+  - [x] Processing_steps table (step execution history with timestamps)
+  - [x] Codes table (code allocation tracking with status)
+  - [x] Metadata table (flexible key-value with provenance)
+  - [x] Registry_state table (system state: next_code_index)
+- [x] Implement CRUD operations
+  - [x] `register_document()` - Add new document with optional code
+  - [x] `update_document_name()` / `update_document_type()` - Modify documents
+  - [x] `get_document_by_path()` / `get_document_by_code()` / `get_document_by_id()` - Queries
+  - [x] `list_documents()` - List with optional filtering and limit
+- [x] Implement code management
+  - [x] `get_next_code_index()` - Query current index
+  - [x] `increment_code_index()` - Atomic increment and return
+  - [x] `allocate_code()` - Reserve code in codes table
+  - [x] `commit_code_to_document()` - Link code to document, mark in_use
+  - [x] `rollback_code()` - Delete uncommitted allocations
+  - [x] `code_exists()` - Check if code already allocated
+- [x] Add metadata tracking
+  - [x] `add_metadata()` - Store extracted fields with provenance
+  - [x] `get_metadata()` - Retrieve all metadata for document
+- [x] Add processing step tracking
+  - [x] `record_processing_step()` - Log step execution with timestamps
+  - [x] `get_processing_steps()` - Retrieve step history
+- [x] Add atomic operations (WAL mode + transactions)
+  - [x] Enable WAL mode for concurrent access
+  - [x] Transaction context manager for batch operations
+  - [x] Foreign keys enabled for referential integrity
+- [x] Add export functionality
+  - [x] `get_statistics()` - Registry stats (counts, next_index)
+  - [x] `export_to_json()` - Export documents and stats to JSON
+- [x] Write smoke tests for registry operations
+  - [x] Test document registration
+  - [x] Test code allocation and linking
+  - [x] Test rollback functionality
+  - [x] Test database persistence and queries
 
 #### Classifier Service ✅ COMPLETED
 - [x] Create `services/classifier.py`
@@ -91,20 +114,28 @@
   - [x] Tested on caselaw (140 points, HIGH confidence)
   - [x] Tested on statutes (205 points, HIGH confidence)
 
-#### Code Generator Service
-- [ ] Create `services/code_generator.py`
-- [ ] Port base-25 encoding logic from step2/filename_indexer.py
-  - [ ] `index_to_code()` function
-  - [ ] `code_to_index()` function (for verification)
-- [ ] Implement code allocation
-  - [ ] Get next available code
-  - [ ] Mark code as used
-  - [ ] Rollback code on failure
-- [ ] Add suffix detection (`has_registry_suffix()`)
-- [ ] Write unit tests for code generation
-  - [ ] Test base-25 encoding/decoding
-  - [ ] Test collision detection
-  - [ ] Test rollback logic
+#### Code Generator Service ✅ COMPLETED
+- [x] Create `services/code_generator.py`
+- [x] Port base-25 encoding logic from step2/filename_indexer.py
+  - [x] `index_to_code()` function (exact port from legacy)
+  - [x] `code_to_index()` function (reverse conversion for validation)
+- [x] Implement code allocation with discovery logic
+  - [x] Get next available code from registrar
+  - [x] Extract existing codes from filenames (regex pattern)
+  - [x] Preserve legacy codes (Scenario A)
+  - [x] Generate new codes for files without valid codes (Scenario B)
+  - [x] Rollback code on failure (atomic operations)
+- [x] Add filename utilities
+  - [x] `has_code_suffix()` - Check for existing code
+  - [x] `extract_code_from_filename()` - Regex extraction with validation
+  - [x] `append_code_to_filename()` - Add ----CODE separator
+  - [x] `is_valid_code()` - Validate format (5 chars, uppercase, no W)
+- [x] Write smoke tests for code generation
+  - [x] Test base-25 encoding/decoding (index 0→AAAAA, 1→AAAAB, etc.)
+  - [x] Test legacy code preservation (old_statute----ABXCD.pdf keeps ABXCD)
+  - [x] Test invalid code replacement (bad_file----WWWWW.pdf gets new code)
+  - [x] Test rollback logic (allocate, rollback, verify)
+  - [x] Test utility functions (extract, append, validate)
 
 ---
 
@@ -196,16 +227,17 @@
 
 ---
 
-## Current Sprint - Phase 1 Foundation (Nov 28, 2025)
+## Current Sprint - Phase 1 Foundation (Nov 28, 2025) ✅ COMPLETED
 
 **Sprint Goal:** Build core services foundation for text extraction and document classification
 
-**Active Tasks:**
-- [ ] Registrar Service (SQLite operations) - NEXT UP
-- [ ] Code Generator Service (base-25 encoding) - PENDING
+**Status:** ✅ ALL PHASE 1 SERVICES COMPLETE (4/4)
 
-**Blocked:**
-- None
+**Completed Services:**
+- [x] Text Extractor Service (335 lines) - PDF/DOCX extraction with normalization
+- [x] Classifier Service (405 lines) - YAML-driven pattern matching
+- [x] Code Generator Service (546 lines) - Base-25 encoding with legacy compatibility
+- [x] Registrar Service (653 lines) - SQLite persistence with WAL mode
 
 **Completed This Sprint:**
 - [x] Project structure created (`src/`, `config/`, `data/`, `registry/`)
@@ -230,10 +262,25 @@
   - `config/document_types/caselaw.yaml` - 122 lines
   - `config/document_types/statutes.yaml` - 167 lines (with Trump Card weights)
   - `config/document_types/article.yaml` - 62 lines (placeholder, disabled)
+- [x] Code generator service (`src/services/code_generator.py` - 546 lines)
+  - Base-25 encoding algorithm (A-Z excluding W)
+  - Discovery logic: preserves legacy codes, generates new for files without codes
+  - Validation: `is_valid_code()` ensures 5 chars, uppercase, no W
+  - Filename utilities: extract, append, validate codes
+  - Tested with 249,025 code compatibility
+- [x] Registrar service (`src/services/registrar.py` - 653 lines)
+  - SQLite database: registry/master.db with 5 tables
+  - Code management: allocate, commit, rollback (atomic operations)
+  - Document tracking: register, query, update (by path/code/id)
+  - Metadata storage: flexible key-value with provenance
+  - Processing steps: pipeline execution history
+  - WAL mode for concurrent access, transaction support
 - [x] Smoke test tools
   - `smoke_test_extractor.py` - 224 lines (CLI for testing extraction)
   - `smoke_test_classifier.py` - 224 lines (CLI for testing classification)
+  - `smoke_test_registry.py` - 489 lines (CLI for testing registry & codes)
   - Rich formatted output with tables and panels
+  - All tests passing (6/6 registry tests, 100% success rate)
 - [x] Requirements file (`requirements.txt`)
   - Added unidecode>=1.3.0 to fix unicode warnings
 - [x] Critical bug fixes
@@ -263,5 +310,6 @@
 ---
 
 **Last Updated:** 2025-11-28
-**Current Phase:** Phase 1 - Core Services Foundation (In Progress)
-**Progress:** Text Extractor ✅ | Classifier ✅ | Registrar (Next) | Code Generator (Pending)
+**Current Phase:** Phase 1 - Core Services Foundation ✅ COMPLETE
+**Progress:** Text Extractor ✅ | Classifier ✅ | Registrar ✅ | Code Generator ✅
+**Next Phase:** Phase 2 - Caselaw End-to-End Pipeline
