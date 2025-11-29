@@ -139,15 +139,24 @@
 
 ---
 
-## Phase 2 Tasks (Pending Phase 1 Completion)
+## Phase 2 Tasks (In Progress)
 
-### Extractor Porting
-- [ ] Port `step1a/extractors/court_extractor.py`
-- [ ] Port `step1a/extractors/reporter_extractor.py`
-- [ ] Port `step1a/extractors/date_extractor.py`
-- [ ] Port `step1a/formatters/case_name_formatter.py`
-- [ ] Copy `data/bluebook_courts_mapping.json`
-- [ ] Copy `data/reporters_database.json`
+### Caselaw Metadata Extraction ✅ COMPLETED
+- [x] Create `config/document_types/caselaw.yaml` with extraction_rules
+  - [x] Case name patterns (v. pattern with cleanup)
+  - [x] Date patterns (Decided, Filed, Argued, fallback)
+  - [x] Court patterns (state, federal district, circuit)
+  - [x] Citation patterns (Ga., S.E.2d, F.2d, F.3d, F.Supp, U.S.)
+- [x] Create `src/plugins/caselaw.py` (510 lines)
+  - [x] CaselawProcessor class with YAML-driven extraction
+  - [x] Priority-based pattern matching
+  - [x] Reference database integration
+  - [x] Graceful fallback handling
+- [x] Copy `data/bluebook_courts_mapping.json` from legacy
+- [x] Copy `data/reporters_database.json` from legacy
+- [x] Create `smoke_test_caselaw.py` (259 lines)
+  - [x] Validation: case name, year, court, citation
+  - [x] 4/4 tests passing on Indian_Trail.pdf
 
 ### Pipeline Steps
 - [ ] Create `steps/base_step.py` (abstract interface)

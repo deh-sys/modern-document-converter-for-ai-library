@@ -864,11 +864,194 @@ Linked code: AAAAE
 - [x] Code Generator - COMPLETE
 - [x] Registrar - COMPLETE
 - [x] Phase 1 smoke tests - ALL PASSING
-- [ ] **Phase 2: Caselaw End-to-End Pipeline**
-  - Port extractors from step1a
+- [x] **Phase 2, Step 1: Caselaw Metadata Extractor - COMPLETE**
+- [ ] **Phase 2, Step 2: Rename Workflow**
   - Build pipeline steps (rename, code, convert, clean)
   - Create orchestrator
   - Build CLI
+
+---
+
+## 2025-11-28 (Evening) - Phase 2, Step 1: Caselaw Metadata Extractor
+
+### Context
+Built the metadata extraction system for caselaw documents. Instead of porting the legacy extractors (court_extractor.py, reporter_extractor.py, date_extractor.py, case_name_formatter.py), created a unified YAML-driven approach that keeps all regex patterns in configuration files.
+
+**Goal:** Extract structured metadata (case name, year, court, citation) from legal case documents using configurable patterns.
+
+### Decisions Made
+
+#### 1. YAML-Driven Extraction Rules ✅
+**Decision:** Define all regex patterns in `config/document_types/caselaw.yaml` instead of hardcoding in Python.
+
+**Rationale:**
+- Patterns can be edited without touching code
+- Priority system allows fallback patterns
+- Confidence levels track reliability
+- Reference to legacy extractors but cleaner architecture
+
+**Structure:**
+```yaml
+extraction_rules:
+  case_name:
+    - pattern: '([A-Z][A-Za-z\s,\.&''\-\(\)]+?)\s+v\.?\s+([A-Za-z\s,\.&''\-\(\)]+?)(?:\n|$)'
+      priority: 1
+      confidence: HIGH
+      captures:
+        plaintiff: {group: 1, cleanup_patterns: [...]}
+        defendant: {group: 2, cleanup_patterns: [...]}
+```
+
+#### 2. Priority-Based Pattern Matching ✅
+**Decision:** Use `priority` field where **lower number = higher priority** (try first).
+
+**Why this matters:**
+- Priority 1 patterns are most specific (e.g., "July 3, 2014, Decided")
+- Priority 5 patterns are fallbacks (e.g., any "Month Day, Year")
+- Prevents false positives (e.g., extracting "As of: October 9, 2024" instead of decision date)
+
+**Implementation:**
+```python
+rules = sorted(rules, key=lambda r: r.get("priority", 999), reverse=False)
+# Try priority 1 first, then 2, then 3...
+```
+
+#### 3. Reference Database Integration ✅
+**Decision:** Load `bluebook_courts_mapping.json` and `reporters_database.json` for court abbreviations and citation formats.
+
+**Rationale:**
+- Leverage existing 200+ court mappings
+- Standardize abbreviations (e.g., "Georgia" → "Ga.")
+- Reuse proven legacy data
+
+#### 4. Standalone Plugin (No BasePlugin) ✅
+**Decision:** Build `CaselawProcessor` as standalone class, not part of plugin abstraction yet.
+
+**Rationale:**
+- Following Caselaw-First development principle
+- Will abstract to plugin system in Phase 4 after seeing patterns across multiple document types
+- Faster iteration without premature abstraction
+
+### Issues Encountered
+
+#### Issue 1: Pydantic Model Mismatch
+**Problem:** MetadataField required `key`, `source` (enum), `confidence` (enum), but was passing `extraction_method` (string) and `confidence` (string).
+
+**Solution:**
+- Added `_map_confidence()` helper to convert string → ConfidenceLevel enum
+- Changed `source="caselaw_processor"` → `source=ExtractionSource.DOCUMENT`
+- Changed `extraction_method="..."` → `extractor_name="CaselawProcessor: ..."`
+
+#### Issue 2: Court Pattern Too Greedy
+**Problem:** Pattern `'Court of Appeals of ([A-Za-z\s]+)'` matched "Court of Appeals of Georgia\nJuly" across newlines.
+
+**Solution:** Changed to `'Court of Appeals of ([A-Za-z]+)(?:\s|$)'` to stop at word boundary.
+
+**Result:** "Ga. Ct. App." instead of "Georgia\nJuly Ct. App."
+
+#### Issue 3: Date Format Mismatch
+**Problem:** Pattern expected "Decided: July 3, 2014" but actual format was "July 3, 2014, Decided" (reverse).
+
+**Solution:** Added multiple date patterns with priorities:
+1. `'([A-Z][a-z]+\s+\d{1,2},\s+(\d{4})),?\s+Decided'` (reverse format)
+2. `'Decided:\s*([A-Z][a-z]+\s+\d{1,2},\s+(\d{4}))'` (colon format)
+3. Generic fallback for any date
+
+#### Issue 4: Nested Regex Groups and `lastindex`
+**Problem:** Pattern with nested groups `(outer (inner))` reports `lastindex=1` even though there are 2 groups.
+
+**Root cause:** `lastindex` returns the highest group number that *participated* in the match, not the total number of groups.
+
+**Solution:** Changed from `match.lastindex >= group_num` to `len(match.groups()) >= group_num`.
+
+**Code:**
+```python
+# Before (broken)
+if match.lastindex >= year_group:
+    year = match.group(year_group)
+
+# After (fixed)
+if len(match.groups()) >= year_group:
+    year = match.group(year_group)
+```
+
+#### Issue 5: Priority Sorting Backwards
+**Problem:** With `reverse=True`, priority 5 was tried before priority 1.
+
+**Root cause:** Confused "highest priority" (should be tried first) with "highest number" (sort descending).
+
+**Solution:** Changed to `reverse=False` with comment clarifying that **lower priority number = higher priority** (industry standard).
+
+### Code Changes
+
+**New Files:**
+- `src/plugins/caselaw.py` (510 lines) - CaselawProcessor with extraction methods
+- `src/plugins/__init__.py` - Package init
+- `smoke_test_caselaw.py` (259 lines) - Test tool with validation
+- `data/bluebook_courts_mapping.json` (copied from legacy)
+- `data/reporters_database.json` (copied from legacy)
+
+**Modified Files:**
+- `config/document_types/caselaw.yaml` - Added extraction_rules section (229 lines added)
+
+**Key Methods:**
+- `extract_metadata(text)` - Main API, returns DocumentMetadata
+- `_extract_case_name(text)` - Party extraction with cleanup
+- `_extract_date(text)` - Year extraction with multiple patterns
+- `_extract_court(text)` - Court identification with abbreviation
+- `_extract_citation(text)` - Reporter citation parsing
+- `_cleanup_party(party, patterns)` - Remove procedural designations
+- `_build_court_name(match, rule)` - Construct court abbreviation
+- `_map_confidence(conf_str)` - String → ConfidenceLevel enum
+
+### Testing Notes
+
+**Test File:** `z-test-files--caselaw/2014-None-915_Indian_Trail.pdf`
+
+**Smoke Test Results:**
+```
+✓ Case name: "Indian Trail, LLC v. State Bank & Trust Co."
+✓ Year: "2014"
+✓ Court: "Ga. Ct. App."
+✓ Citation: "328 Ga. App. 524"
+
+Results: 4/4 validations passed
+```
+
+**Validation Logic:**
+- Case name: Must contain "indian trail" and "state bank"
+- Year: Must equal "2014"
+- Court: Must contain "Ga" (Georgia)
+- Citation: Must contain "328 Ga. App." or "759 S.E.2d"
+
+### Lessons Learned
+
+**Pattern Design:**
+- Always test patterns against real documents (not hypothetical formats)
+- Priority system prevents false positives from generic fallback patterns
+- Multi-line aware patterns need careful boundary handling (`(?:\n|$)`, `(?:\s|$)`)
+
+**Regex Debugging:**
+- Use `len(match.groups())` instead of `match.lastindex` for nested groups
+- Print all groups during debugging: `match.groups()`
+- Test patterns in isolation before integrating
+
+**YAML Configuration:**
+- Comments in YAML are critical for documenting pattern intent
+- Priority semantics should be documented (lower number = higher priority)
+- Examples in comments help future editors
+
+**Pydantic Models:**
+- Always check model definition before using
+- Enum fields need proper mapping functions
+- Frozen models (immutable) prevent accidental modification
+
+### Next Steps
+- [ ] **Phase 2, Step 2: Rename Workflow**
+  - Build filename template system
+  - Create rename_step.py for orchestration
+  - Integrate metadata extraction + code generation
+  - Test on sample caselaw files
 
 ---
 
@@ -905,4 +1088,4 @@ Linked code: AAAAE
 ---
 
 **Logbook started:** 2025-11-28
-**Last updated:** 2025-11-28 (Late Evening - Phase 1 Complete: All Core Services Implemented)
+**Last updated:** 2025-11-28 (Evening - Phase 2, Step 1 Complete: Caselaw Metadata Extractor)

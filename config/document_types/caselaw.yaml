@@ -107,6 +107,258 @@ confidence_thresholds:
   low: 10       # Score >= 10 → LOW confidence
                 # Score < 10  → Too low, return UNKNOWN
 
+# ============================================================================
+# EXTRACTION RULES
+# ============================================================================
+#
+# Patterns for extracting structured metadata from caselaw documents.
+# These are separate from classification patterns above.
+#
+# Each extractor attempts to find specific metadata fields using regex.
+# Priority determines which pattern to try first (higher = first).
+# Confidence indicates reliability of the extraction.
+
+extraction_rules:
+  # ==========================================================================
+  # CASE NAME EXTRACTION
+  # ==========================================================================
+  case_name:
+    - pattern: '([A-Z][A-Za-z\s,\.&''\-\(\)]+?)\s+v\.?\s+([A-Za-z\s,\.&''\-\(\)]+?)(?:\n|$)'
+      description: "Case caption with 'v.' pattern (multi-line aware)"
+      priority: 1
+      confidence: HIGH
+      captures:
+        plaintiff:
+          group: 1
+          cleanup_patterns:
+            - ',?\s*Petitioners?'
+            - ',?\s*Plaintiffs?'
+            - ',?\s*Appellants?'
+            - ',?\s*et\s+al\.?'
+        defendant:
+          group: 2
+          cleanup_patterns:
+            - ',?\s*Respondents?'
+            - ',?\s*Defendants?'
+            - ',?\s*Appellees?'
+            - ',?\s*et\s+al\.?'
+      notes: "Extract both parties, then join with ' v. '"
+
+  # ==========================================================================
+  # DATE EXTRACTION
+  # ==========================================================================
+  date:
+    - pattern: '([A-Z][a-z]+\s+\d{1,2},\s+(\d{4})),?\s+Decided'
+      description: "Decided date (reverse format)"
+      priority: 1
+      confidence: HIGH
+      captures:
+        full_date:
+          group: 1
+        year:
+          group: 2
+      notes: "Format: 'July 3, 2014, Decided'"
+
+    - pattern: 'Decided:\s*([A-Z][a-z]+\s+\d{1,2},\s+(\d{4}))'
+      description: "Decided date (colon format)"
+      priority: 2
+      confidence: HIGH
+      captures:
+        full_date:
+          group: 1
+        year:
+          group: 2
+      notes: "Format: 'Decided: July 3, 2014'"
+
+    - pattern: 'Filed:\s*([A-Z][a-z]+\s+\d{1,2},\s+(\d{4}))'
+      description: "Filed date (fallback)"
+      priority: 3
+      confidence: HIGH
+      captures:
+        full_date:
+          group: 1
+        year:
+          group: 2
+
+    - pattern: 'Argued:\s*([A-Z][a-z]+\s+\d{1,2},\s+(\d{4}))'
+      description: "Argued date (lower priority)"
+      priority: 4
+      confidence: MEDIUM
+      captures:
+        full_date:
+          group: 1
+        year:
+          group: 2
+
+    - pattern: '([A-Z][a-z]+\s+\d{1,2},\s+(\d{4}))'
+      description: "Any date format (fallback)"
+      priority: 5
+      confidence: MEDIUM
+      captures:
+        full_date:
+          group: 1
+        year:
+          group: 2
+      notes: "Matches any 'Month Day, Year' format"
+
+  # ==========================================================================
+  # COURT EXTRACTION
+  # ==========================================================================
+  court:
+    - pattern: 'Court of Appeals of ([A-Za-z]+)(?:\s|$)'
+      description: "State Court of Appeals"
+      priority: 1
+      confidence: HIGH
+      captures:
+        state:
+          group: 1
+      notes: "Format: 'Court of Appeals of Georgia'"
+
+    - pattern: 'Supreme Court of ([A-Za-z\s]+)'
+      description: "State Supreme Court"
+      priority: 1
+      confidence: HIGH
+      captures:
+        state:
+          group: 1
+
+    - pattern: 'United States Court of Appeals(?:,?\s+|\s+for\s+the\s+)((?:First|Second|Third|Fourth|Fifth|Sixth|Seventh|Eighth|Ninth|Tenth|Eleventh|D\.?C\.|Federal)\s+Circuit)'
+      description: "Federal Circuit Court of Appeals"
+      priority: 1
+      confidence: HIGH
+      captures:
+        circuit:
+          group: 1
+
+    - pattern: 'United States District Court.*?for the\s+((?:Northern|Southern|Eastern|Western)\s+District\s+of)\s+([A-Za-z\s]+?)'
+      description: "Federal District Court"
+      priority: 2
+      confidence: HIGH
+      captures:
+        district:
+          group: 1
+        state:
+          group: 2
+
+  # ==========================================================================
+  # CITATION EXTRACTION
+  # ==========================================================================
+  citation:
+    # Georgia Reporters
+    - pattern: '(\d+)\s+Ga\.\s*App\.\s+(\d+)'
+      description: "Georgia Court of Appeals Reporter"
+      priority: 1
+      confidence: HIGH
+      captures:
+        volume:
+          group: 1
+        page:
+          group: 2
+      reporter: "Ga. App."
+      notes: "Format: '328 Ga. App. 524'"
+
+    - pattern: '(\d+)\s+Ga\.\s+(\d+)'
+      description: "Georgia Reports (Supreme Court)"
+      priority: 1
+      confidence: HIGH
+      captures:
+        volume:
+          group: 1
+        page:
+          group: 2
+      reporter: "Ga."
+
+    # South Eastern Reporter
+    - pattern: '(\d+)\s+S\.E\.\s*2d\s+(\d+)'
+      description: "South Eastern Reporter, Second Series"
+      priority: 1
+      confidence: HIGH
+      captures:
+        volume:
+          group: 1
+        page:
+          group: 2
+      reporter: "S.E.2d"
+
+    - pattern: '(\d+)\s+S\.E\.\s*3d\s+(\d+)'
+      description: "South Eastern Reporter, Third Series"
+      priority: 1
+      confidence: HIGH
+      captures:
+        volume:
+          group: 1
+        page:
+          group: 2
+      reporter: "S.E.3d"
+
+    # Federal Reporters
+    - pattern: '(\d+)\s+F\.\s*3d\s+(\d+)'
+      description: "Federal Reporter, Third Series"
+      priority: 1
+      confidence: HIGH
+      captures:
+        volume:
+          group: 1
+        page:
+          group: 2
+      reporter: "F.3d"
+
+    - pattern: '(\d+)\s+F\.\s*2d\s+(\d+)'
+      description: "Federal Reporter, Second Series"
+      priority: 1
+      confidence: HIGH
+      captures:
+        volume:
+          group: 1
+        page:
+          group: 2
+      reporter: "F.2d"
+
+    - pattern: '(\d+)\s+F\.\s*Supp\.\s*2d\s+(\d+)'
+      description: "Federal Supplement, Second Series"
+      priority: 2
+      confidence: HIGH
+      captures:
+        volume:
+          group: 1
+        page:
+          group: 2
+      reporter: "F. Supp. 2d"
+
+    - pattern: '(\d+)\s+F\.\s*Supp\.\s*3d\s+(\d+)'
+      description: "Federal Supplement, Third Series"
+      priority: 2
+      confidence: HIGH
+      captures:
+        volume:
+          group: 1
+        page:
+          group: 2
+      reporter: "F. Supp. 3d"
+
+    # U.S. Supreme Court
+    - pattern: '(\d+)\s+U\.S\.\s+(\d+)'
+      description: "United States Reports"
+      priority: 1
+      confidence: HIGH
+      captures:
+        volume:
+          group: 1
+        page:
+          group: 2
+      reporter: "U.S."
+
+    - pattern: '(\d+)\s+S\.\s*Ct\.\s+(\d+)'
+      description: "Supreme Court Reporter"
+      priority: 1
+      confidence: HIGH
+      captures:
+        volume:
+          group: 1
+        page:
+          group: 2
+      reporter: "S. Ct."
+
 # Metadata
 classifier_version: "1.0"
 last_updated: "2025-11-28"

@@ -1,0 +1,480 @@
+{
+  "federal": {
+    "supreme_court": {
+      "patterns": [
+        "SUPREME COURT OF THE UNITED STATES",
+        "U\\.?S\\.? SUPREME COURT",
+        "UNITED STATES SUPREME COURT",
+        "Supreme Court of the United States"
+      ],
+      "bluebook": "U.S.",
+      "filename_code": "US",
+      "full_name": "Supreme Court of the United States"
+    },
+    "courts_of_appeals": {
+      "1st": {
+        "patterns": ["First Circuit", "1st Cir"],
+        "bluebook": "1st Cir.",
+        "filename_code": "1stCir"
+      },
+      "2d": {
+        "patterns": ["Second Circuit", "2d Cir", "2nd Cir"],
+        "bluebook": "2d Cir.",
+        "filename_code": "2dCir"
+      },
+      "3d": {
+        "patterns": ["Third Circuit", "3d Cir", "3rd Cir"],
+        "bluebook": "3d Cir.",
+        "filename_code": "3dCir"
+      },
+      "4th": {
+        "patterns": ["Fourth Circuit", "4th Cir"],
+        "bluebook": "4th Cir.",
+        "filename_code": "4thCir"
+      },
+      "5th": {
+        "patterns": ["Fifth Circuit", "5th Cir"],
+        "bluebook": "5th Cir.",
+        "filename_code": "5thCir"
+      },
+      "6th": {
+        "patterns": ["Sixth Circuit", "6th Cir"],
+        "bluebook": "6th Cir.",
+        "filename_code": "6thCir"
+      },
+      "7th": {
+        "patterns": ["Seventh Circuit", "7th Cir"],
+        "bluebook": "7th Cir.",
+        "filename_code": "7thCir"
+      },
+      "8th": {
+        "patterns": ["Eighth Circuit", "8th Cir"],
+        "bluebook": "8th Cir.",
+        "filename_code": "8thCir"
+      },
+      "9th": {
+        "patterns": ["Ninth Circuit", "9th Cir"],
+        "bluebook": "9th Cir.",
+        "filename_code": "9thCir"
+      },
+      "10th": {
+        "patterns": ["Tenth Circuit", "10th Cir"],
+        "bluebook": "10th Cir.",
+        "filename_code": "10thCir"
+      },
+      "11th": {
+        "patterns": ["Eleventh Circuit", "11th Cir"],
+        "bluebook": "11th Cir.",
+        "filename_code": "11thCir"
+      },
+      "DC": {
+        "patterns": ["D\\.?C\\.? Circuit", "District of Columbia Circuit"],
+        "bluebook": "D.C. Cir.",
+        "filename_code": "DCCir"
+      },
+      "Fed": {
+        "patterns": ["Federal Circuit"],
+        "bluebook": "Fed. Cir.",
+        "filename_code": "FedCir"
+      }
+    },
+    "district_courts": {
+      "Alabama": {
+        "Northern": {"bluebook": "N.D. Ala.", "filename_code": "NDAla"},
+        "Middle": {"bluebook": "M.D. Ala.", "filename_code": "MDAla"},
+        "Southern": {"bluebook": "S.D. Ala.", "filename_code": "SDAla"}
+      },
+      "Alaska": {
+        "District": {"bluebook": "D. Alaska", "filename_code": "DAlaska"}
+      },
+      "Arizona": {
+        "District": {"bluebook": "D. Ariz.", "filename_code": "DAriz"}
+      },
+      "Arkansas": {
+        "Eastern": {"bluebook": "E.D. Ark.", "filename_code": "EDArk"},
+        "Western": {"bluebook": "W.D. Ark.", "filename_code": "WDArk"}
+      },
+      "California": {
+        "Northern": {"bluebook": "N.D. Cal.", "filename_code": "NDCal"},
+        "Eastern": {"bluebook": "E.D. Cal.", "filename_code": "EDCal"},
+        "Central": {"bluebook": "C.D. Cal.", "filename_code": "CDCal"},
+        "Southern": {"bluebook": "S.D. Cal.", "filename_code": "SDCal"}
+      },
+      "Colorado": {
+        "District": {"bluebook": "D. Colo.", "filename_code": "DColo"}
+      },
+      "Connecticut": {
+        "District": {"bluebook": "D. Conn.", "filename_code": "DConn"}
+      },
+      "Delaware": {
+        "District": {"bluebook": "D. Del.", "filename_code": "DDel"}
+      },
+      "District of Columbia": {
+        "District": {"bluebook": "D.D.C.", "filename_code": "DDC"}
+      },
+      "Florida": {
+        "Northern": {"bluebook": "N.D. Fla.", "filename_code": "NDFla"},
+        "Middle": {"bluebook": "M.D. Fla.", "filename_code": "MDFla"},
+        "Southern": {"bluebook": "S.D. Fla.", "filename_code": "SDFla"}
+      },
+      "Georgia": {
+        "Northern": {"bluebook": "N.D. Ga.", "filename_code": "NDGa"},
+        "Middle": {"bluebook": "M.D. Ga.", "filename_code": "MDGa"},
+        "Southern": {"bluebook": "S.D. Ga.", "filename_code": "SDGa"}
+      },
+      "Hawaii": {
+        "District": {"bluebook": "D. Haw.", "filename_code": "DHaw"}
+      },
+      "Idaho": {
+        "District": {"bluebook": "D. Idaho", "filename_code": "DIdaho"}
+      },
+      "Illinois": {
+        "Northern": {"bluebook": "N.D. Ill.", "filename_code": "NDIll"},
+        "Central": {"bluebook": "C.D. Ill.", "filename_code": "CDIll"},
+        "Southern": {"bluebook": "S.D. Ill.", "filename_code": "SDIll"}
+      },
+      "Indiana": {
+        "Northern": {"bluebook": "N.D. Ind.", "filename_code": "NDInd"},
+        "Southern": {"bluebook": "S.D. Ind.", "filename_code": "SDInd"}
+      },
+      "Iowa": {
+        "Northern": {"bluebook": "N.D. Iowa", "filename_code": "NDIowa"},
+        "Southern": {"bluebook": "S.D. Iowa", "filename_code": "SDIowa"}
+      },
+      "Kansas": {
+        "District": {"bluebook": "D. Kan.", "filename_code": "DKan"}
+      },
+      "Kentucky": {
+        "Eastern": {"bluebook": "E.D. Ky.", "filename_code": "EDKy"},
+        "Western": {"bluebook": "W.D. Ky.", "filename_code": "WDKy"}
+      },
+      "Louisiana": {
+        "Eastern": {"bluebook": "E.D. La.", "filename_code": "EDLa"},
+        "Middle": {"bluebook": "M.D. La.", "filename_code": "MDLa"},
+        "Western": {"bluebook": "W.D. La.", "filename_code": "WDLa"}
+      },
+      "Maine": {
+        "District": {"bluebook": "D. Me.", "filename_code": "DMe"}
+      },
+      "Maryland": {
+        "District": {"bluebook": "D. Md.", "filename_code": "DMd"}
+      },
+      "Massachusetts": {
+        "District": {"bluebook": "D. Mass.", "filename_code": "DMass"}
+      },
+      "Michigan": {
+        "Eastern": {"bluebook": "E.D. Mich.", "filename_code": "EDMich"},
+        "Western": {"bluebook": "W.D. Mich.", "filename_code": "WDMich"}
+      },
+      "Minnesota": {
+        "District": {"bluebook": "D. Minn.", "filename_code": "DMinn"}
+      },
+      "Mississippi": {
+        "Northern": {"bluebook": "N.D. Miss.", "filename_code": "NDMiss"},
+        "Southern": {"bluebook": "S.D. Miss.", "filename_code": "SDMiss"}
+      },
+      "Missouri": {
+        "Eastern": {"bluebook": "E.D. Mo.", "filename_code": "EDMo"},
+        "Western": {"bluebook": "W.D. Mo.", "filename_code": "WDMo"}
+      },
+      "Montana": {
+        "District": {"bluebook": "D. Mont.", "filename_code": "DMont"}
+      },
+      "Nebraska": {
+        "District": {"bluebook": "D. Neb.", "filename_code": "DNeb"}
+      },
+      "Nevada": {
+        "District": {"bluebook": "D. Nev.", "filename_code": "DNev"}
+      },
+      "New Hampshire": {
+        "District": {"bluebook": "D.N.H.", "filename_code": "DNH"}
+      },
+      "New Jersey": {
+        "District": {"bluebook": "D.N.J.", "filename_code": "DNJ"}
+      },
+      "New Mexico": {
+        "District": {"bluebook": "D.N.M.", "filename_code": "DNM"}
+      },
+      "New York": {
+        "Northern": {"bluebook": "N.D.N.Y.", "filename_code": "NDNY"},
+        "Eastern": {"bluebook": "E.D.N.Y.", "filename_code": "EDNY"},
+        "Southern": {"bluebook": "S.D.N.Y.", "filename_code": "SDNY"},
+        "Western": {"bluebook": "W.D.N.Y.", "filename_code": "WDNY"}
+      },
+      "North Carolina": {
+        "Eastern": {"bluebook": "E.D.N.C.", "filename_code": "EDNC"},
+        "Middle": {"bluebook": "M.D.N.C.", "filename_code": "MDNC"},
+        "Western": {"bluebook": "W.D.N.C.", "filename_code": "WDNC"}
+      },
+      "North Dakota": {
+        "District": {"bluebook": "D.N.D.", "filename_code": "DND"}
+      },
+      "Ohio": {
+        "Northern": {"bluebook": "N.D. Ohio", "filename_code": "NDOhio"},
+        "Southern": {"bluebook": "S.D. Ohio", "filename_code": "SDOhio"}
+      },
+      "Oklahoma": {
+        "Northern": {"bluebook": "N.D. Okla.", "filename_code": "NDOkla"},
+        "Eastern": {"bluebook": "E.D. Okla.", "filename_code": "EDOkla"},
+        "Western": {"bluebook": "W.D. Okla.", "filename_code": "WDOkla"}
+      },
+      "Oregon": {
+        "District": {"bluebook": "D. Or.", "filename_code": "DOr"}
+      },
+      "Pennsylvania": {
+        "Eastern": {"bluebook": "E.D. Pa.", "filename_code": "EDPa"},
+        "Middle": {"bluebook": "M.D. Pa.", "filename_code": "MDPa"},
+        "Western": {"bluebook": "W.D. Pa.", "filename_code": "WDPa"}
+      },
+      "Puerto Rico": {
+        "District": {"bluebook": "D.P.R.", "filename_code": "DPR"}
+      },
+      "Rhode Island": {
+        "District": {"bluebook": "D.R.I.", "filename_code": "DRI"}
+      },
+      "South Carolina": {
+        "District": {"bluebook": "D.S.C.", "filename_code": "DSC"}
+      },
+      "South Dakota": {
+        "District": {"bluebook": "D.S.D.", "filename_code": "DSD"}
+      },
+      "Tennessee": {
+        "Eastern": {"bluebook": "E.D. Tenn.", "filename_code": "EDTenn"},
+        "Middle": {"bluebook": "M.D. Tenn.", "filename_code": "MDTenn"},
+        "Western": {"bluebook": "W.D. Tenn.", "filename_code": "WDTenn"}
+      },
+      "Texas": {
+        "Northern": {"bluebook": "N.D. Tex.", "filename_code": "NDTex"},
+        "Eastern": {"bluebook": "E.D. Tex.", "filename_code": "EDTex"},
+        "Southern": {"bluebook": "S.D. Tex.", "filename_code": "SDTex"},
+        "Western": {"bluebook": "W.D. Tex.", "filename_code": "WDTex"}
+      },
+      "Utah": {
+        "District": {"bluebook": "D. Utah", "filename_code": "DUtah"}
+      },
+      "Vermont": {
+        "District": {"bluebook": "D. Vt.", "filename_code": "DVt"}
+      },
+      "Virginia": {
+        "Eastern": {"bluebook": "E.D. Va.", "filename_code": "EDVa"},
+        "Western": {"bluebook": "W.D. Va.", "filename_code": "WDVa"}
+      },
+      "Washington": {
+        "Eastern": {"bluebook": "E.D. Wash.", "filename_code": "EDWash"},
+        "Western": {"bluebook": "W.D. Wash.", "filename_code": "WDWash"}
+      },
+      "West Virginia": {
+        "Northern": {"bluebook": "N.D.W. Va.", "filename_code": "NDWVa"},
+        "Southern": {"bluebook": "S.D.W. Va.", "filename_code": "SDWVa"}
+      },
+      "Wisconsin": {
+        "Eastern": {"bluebook": "E.D. Wis.", "filename_code": "EDWis"},
+        "Western": {"bluebook": "W.D. Wis.", "filename_code": "WDWis"}
+      },
+      "Wyoming": {
+        "District": {"bluebook": "D. Wyo.", "filename_code": "DWyo"}
+      }
+    }
+  },
+  "state": {
+    "Alabama": {
+      "supreme": {"bluebook": "Ala.", "filename_code": "Ala"},
+      "civil_appeals": {"bluebook": "Ala. Civ. App.", "filename_code": "AlaCivApp"},
+      "criminal_appeals": {"bluebook": "Ala. Crim. App.", "filename_code": "AlaCrimApp"}
+    },
+    "Alaska": {
+      "supreme": {"bluebook": "Alaska", "filename_code": "Alaska"},
+      "appeals": {"bluebook": "Alaska Ct. App.", "filename_code": "AlaskaCtApp"}
+    },
+    "Arizona": {
+      "supreme": {"bluebook": "Ariz.", "filename_code": "Ariz"},
+      "appeals": {"bluebook": "Ariz. Ct. App.", "filename_code": "ArizCtApp"}
+    },
+    "Arkansas": {
+      "supreme": {"bluebook": "Ark.", "filename_code": "Ark"},
+      "appeals": {"bluebook": "Ark. Ct. App.", "filename_code": "ArkCtApp"}
+    },
+    "California": {
+      "supreme": {"bluebook": "Cal.", "filename_code": "Cal"},
+      "appeals": {"bluebook": "Cal. Ct. App.", "filename_code": "CalCtApp"}
+    },
+    "Colorado": {
+      "supreme": {"bluebook": "Colo.", "filename_code": "Colo"},
+      "appeals": {"bluebook": "Colo. App.", "filename_code": "ColoApp"}
+    },
+    "Connecticut": {
+      "supreme": {"bluebook": "Conn.", "filename_code": "Conn"},
+      "appeals": {"bluebook": "Conn. App. Ct.", "filename_code": "ConnAppCt"}
+    },
+    "Delaware": {
+      "supreme": {"bluebook": "Del.", "filename_code": "Del"},
+      "chancery": {"bluebook": "Del. Ch.", "filename_code": "DelCh"}
+    },
+    "District of Columbia": {
+      "appeals": {"bluebook": "D.C.", "filename_code": "DC"}
+    },
+    "Florida": {
+      "supreme": {"bluebook": "Fla.", "filename_code": "Fla"},
+      "appeals": {"bluebook": "Fla. Dist. Ct. App.", "filename_code": "FlaDistCtApp"}
+    },
+    "Georgia": {
+      "supreme": {"bluebook": "Ga.", "filename_code": "Ga"},
+      "appeals": {"bluebook": "Ga. Ct. App.", "filename_code": "GaCtApp"}
+    },
+    "Hawaii": {
+      "supreme": {"bluebook": "Haw.", "filename_code": "Haw"},
+      "appeals": {"bluebook": "Haw. Ct. App.", "filename_code": "HawCtApp"}
+    },
+    "Idaho": {
+      "supreme": {"bluebook": "Idaho", "filename_code": "Idaho"},
+      "appeals": {"bluebook": "Idaho Ct. App.", "filename_code": "IdahoCtApp"}
+    },
+    "Illinois": {
+      "supreme": {"bluebook": "Ill.", "filename_code": "Ill"},
+      "appeals": {"bluebook": "Ill. App. Ct.", "filename_code": "IllAppCt"}
+    },
+    "Indiana": {
+      "supreme": {"bluebook": "Ind.", "filename_code": "Ind"},
+      "appeals": {"bluebook": "Ind. Ct. App.", "filename_code": "IndCtApp"}
+    },
+    "Iowa": {
+      "supreme": {"bluebook": "Iowa", "filename_code": "Iowa"},
+      "appeals": {"bluebook": "Iowa Ct. App.", "filename_code": "IowaCtApp"}
+    },
+    "Kansas": {
+      "supreme": {"bluebook": "Kan.", "filename_code": "Kan"},
+      "appeals": {"bluebook": "Kan. Ct. App.", "filename_code": "KanCtApp"}
+    },
+    "Kentucky": {
+      "supreme": {"bluebook": "Ky.", "filename_code": "Ky"},
+      "appeals": {"bluebook": "Ky. Ct. App.", "filename_code": "KyCtApp"}
+    },
+    "Louisiana": {
+      "supreme": {"bluebook": "La.", "filename_code": "La"},
+      "appeals": {"bluebook": "La. Ct. App.", "filename_code": "LaCtApp"}
+    },
+    "Maine": {
+      "supreme": {"bluebook": "Me.", "filename_code": "Me"}
+    },
+    "Maryland": {
+      "supreme": {"bluebook": "Md.", "filename_code": "Md"},
+      "special_appeals": {"bluebook": "Md. Ct. Spec. App.", "filename_code": "MdCtSpecApp"}
+    },
+    "Massachusetts": {
+      "supreme": {"bluebook": "Mass.", "filename_code": "Mass"},
+      "appeals": {"bluebook": "Mass. App. Ct.", "filename_code": "MassAppCt"}
+    },
+    "Michigan": {
+      "supreme": {"bluebook": "Mich.", "filename_code": "Mich"},
+      "appeals": {"bluebook": "Mich. Ct. App.", "filename_code": "MichCtApp"}
+    },
+    "Minnesota": {
+      "supreme": {"bluebook": "Minn.", "filename_code": "Minn"},
+      "appeals": {"bluebook": "Minn. Ct. App.", "filename_code": "MinnCtApp"}
+    },
+    "Mississippi": {
+      "supreme": {"bluebook": "Miss.", "filename_code": "Miss"},
+      "appeals": {"bluebook": "Miss. Ct. App.", "filename_code": "MissCtApp"}
+    },
+    "Missouri": {
+      "supreme": {"bluebook": "Mo.", "filename_code": "Mo"},
+      "appeals": {"bluebook": "Mo. Ct. App.", "filename_code": "MoCtApp"}
+    },
+    "Montana": {
+      "supreme": {"bluebook": "Mont.", "filename_code": "Mont"}
+    },
+    "Nebraska": {
+      "supreme": {"bluebook": "Neb.", "filename_code": "Neb"},
+      "appeals": {"bluebook": "Neb. Ct. App.", "filename_code": "NebCtApp"}
+    },
+    "Nevada": {
+      "supreme": {"bluebook": "Nev.", "filename_code": "Nev"}
+    },
+    "New Hampshire": {
+      "supreme": {"bluebook": "N.H.", "filename_code": "NH"}
+    },
+    "New Jersey": {
+      "supreme": {"bluebook": "N.J.", "filename_code": "NJ"},
+      "superior_appeals": {"bluebook": "N.J. Super. Ct. App. Div.", "filename_code": "NJSuperCtAppDiv"}
+    },
+    "New Mexico": {
+      "supreme": {"bluebook": "N.M.", "filename_code": "NM"},
+      "appeals": {"bluebook": "N.M. Ct. App.", "filename_code": "NMCtApp"}
+    },
+    "New York": {
+      "appeals": {"bluebook": "N.Y.", "filename_code": "NY"},
+      "appellate_division": {"bluebook": "N.Y. App. Div.", "filename_code": "NYAppDiv"}
+    },
+    "North Carolina": {
+      "supreme": {"bluebook": "N.C.", "filename_code": "NC"},
+      "appeals": {"bluebook": "N.C. Ct. App.", "filename_code": "NCCtApp"}
+    },
+    "North Dakota": {
+      "supreme": {"bluebook": "N.D.", "filename_code": "ND"},
+      "appeals": {"bluebook": "N.D. Ct. App.", "filename_code": "NDCtApp"}
+    },
+    "Ohio": {
+      "supreme": {"bluebook": "Ohio", "filename_code": "Ohio"},
+      "appeals": {"bluebook": "Ohio Ct. App.", "filename_code": "OhioCtApp"}
+    },
+    "Oklahoma": {
+      "supreme": {"bluebook": "Okla.", "filename_code": "Okla"},
+      "criminal_appeals": {"bluebook": "Okla. Crim. App.", "filename_code": "OklaCrimApp"},
+      "civil_appeals": {"bluebook": "Okla. Civ. App.", "filename_code": "OklaCivApp"}
+    },
+    "Oregon": {
+      "supreme": {"bluebook": "Or.", "filename_code": "Or"},
+      "appeals": {"bluebook": "Or. Ct. App.", "filename_code": "OrCtApp"}
+    },
+    "Pennsylvania": {
+      "supreme": {"bluebook": "Pa.", "filename_code": "Pa"},
+      "superior": {"bluebook": "Pa. Super. Ct.", "filename_code": "PaSuperCt"},
+      "commonwealth": {"bluebook": "Pa. Commw. Ct.", "filename_code": "PaCommwCt"}
+    },
+    "Rhode Island": {
+      "supreme": {"bluebook": "R.I.", "filename_code": "RI"}
+    },
+    "South Carolina": {
+      "supreme": {"bluebook": "S.C.", "filename_code": "SC"},
+      "appeals": {"bluebook": "S.C. Ct. App.", "filename_code": "SCCtApp"}
+    },
+    "South Dakota": {
+      "supreme": {"bluebook": "S.D.", "filename_code": "SD"}
+    },
+    "Tennessee": {
+      "supreme": {"bluebook": "Tenn.", "filename_code": "Tenn"},
+      "appeals": {"bluebook": "Tenn. Ct. App.", "filename_code": "TennCtApp"},
+      "criminal_appeals": {"bluebook": "Tenn. Crim. App.", "filename_code": "TennCrimApp"}
+    },
+    "Texas": {
+      "supreme": {"bluebook": "Tex.", "filename_code": "Tex"},
+      "criminal_appeals": {"bluebook": "Tex. Crim. App.", "filename_code": "TexCrimApp"},
+      "appeals": {"bluebook": "Tex. App.", "filename_code": "TexApp"}
+    },
+    "Utah": {
+      "supreme": {"bluebook": "Utah", "filename_code": "Utah"},
+      "appeals": {"bluebook": "Utah Ct. App.", "filename_code": "UtahCtApp"}
+    },
+    "Vermont": {
+      "supreme": {"bluebook": "Vt.", "filename_code": "Vt"}
+    },
+    "Virginia": {
+      "supreme": {"bluebook": "Va.", "filename_code": "Va"},
+      "appeals": {"bluebook": "Va. Ct. App.", "filename_code": "VaCtApp"}
+    },
+    "Washington": {
+      "supreme": {"bluebook": "Wash.", "filename_code": "Wash"},
+      "appeals": {"bluebook": "Wash. Ct. App.", "filename_code": "WashCtApp"}
+    },
+    "West Virginia": {
+      "supreme": {"bluebook": "W. Va.", "filename_code": "WVa"}
+    },
+    "Wisconsin": {
+      "supreme": {"bluebook": "Wis.", "filename_code": "Wis"},
+      "appeals": {"bluebook": "Wis. Ct. App.", "filename_code": "WisCtApp"}
+    },
+    "Wyoming": {
+      "supreme": {"bluebook": "Wyo.", "filename_code": "Wyo"}
+    }
+  }
+}
