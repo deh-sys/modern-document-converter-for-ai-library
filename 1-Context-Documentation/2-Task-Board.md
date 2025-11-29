@@ -158,10 +158,30 @@
   - [x] Validation: case name, year, court, citation
   - [x] 4/4 tests passing on Indian_Trail.pdf
 
-### Pipeline Steps
-- [ ] Create `steps/base_step.py` (abstract interface)
-- [ ] Create `steps/rename_step.py`
-- [ ] Create `steps/code_step.py`
+### Rename Workflow ✅ COMPLETED
+- [x] Create `config/filename_templates/caselaw.yaml` (122 lines)
+  - [x] Legacy format template: c.{COURT}__{YEAR}__{CASE_NAME}__{CITATION}----{CODE}
+  - [x] Field formatting rules (hyphens, underscores, sanitization)
+  - [x] Length limits and fallback handling
+- [x] Create `src/formatters/filename_formatter.py` (402 lines)
+  - [x] format_court() - spaces→underscores, remove periods
+  - [x] format_year() - as-is validation
+  - [x] format_case_name() - spaces→hyphens, &→and, cleanup
+  - [x] format_citation() - spaces→underscores, remove periods
+  - [x] sanitize_filename() - remove OS-illegal characters only
+  - [x] truncate_if_needed() - enforce 255 char limit
+- [x] Create `src/steps/rename_step.py` (369 lines)
+  - [x] Atomic workflow: extract → classify → metadata → code → format → rename
+  - [x] RenameStep class with dry-run mode
+  - [x] Registry integration (register before rename)
+  - [x] Code allocation BEFORE filename generation (prevents collisions)
+  - [x] Error handling with rollback support
+- [x] Create `smoke_test_rename.py` (270 lines)
+  - [x] End-to-end validation
+  - [x] 4/4 tests passing on Indian_Trail.pdf
+  - [x] Expected output: c.Ga_Ct_App__2014__Indian-Trail-LLC-v-State-Bank-and-Trust-Co__328_Ga_App_524----AAAAA.pdf
+
+### Pipeline Steps (Remaining)
 - [ ] Create `steps/convert_step.py`
 - [ ] Create `steps/clean_step.py`
 

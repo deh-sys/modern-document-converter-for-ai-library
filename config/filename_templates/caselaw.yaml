@@ -1,0 +1,145 @@
+# Caselaw Filename Template Configuration
+#
+# Defines the standardized filename format for legal case documents.
+#
+# Legacy Format (from step1a):
+#   c.{COURT}__{YEAR}__{CASE_NAME}__{CITATION}----{CODE}.ext
+#
+# Example:
+#   c.ILL_ND__2010__Abbott-v-Sandoz__743_FSupp2d_762----ABCDE.pdf
+#   c.Ga_Ct_App__2014__Indian-Trail-v-State-Bank__328_GaApp_524----BCDEF.pdf
+#
+# Components:
+#   - Prefix: "c." (indicates caselaw document type)
+#   - Court: Abbreviated court name (e.g., "ILL_ND", "Ga_Ct_App")
+#   - Year: 4-digit decision year
+#   - Case Name: Formatted party names (spaces → hyphens)
+#   - Citation: Reporter citation (spaces → underscores, no periods)
+#   - Code: 5-letter unique identifier (added by code generator)
+#   - Extension: Original file extension (.pdf, .docx, etc.)
+
+document_type: caselaw
+
+# Filename Template Pattern
+# Placeholders: {court}, {year}, {case_name}, {citation}, {code}
+template:
+  pattern: "c.{court}__{year}__{case_name}__{citation}----{code}"
+  description: "Caselaw standardized filename format"
+
+  # Field separators
+  separators:
+    major: "__"           # Between major components (court, year, case_name, citation)
+    code: "----"          # Before unique code (4 hyphens)
+    prefix: "c."          # Document type prefix
+
+# Field Formatting Rules
+formatting:
+  court:
+    description: "Court abbreviation from metadata"
+    rules:
+      - "Use court value as-is from metadata (already abbreviated)"
+      - "Spaces → underscores"
+      - "Periods → nothing (remove)"
+    examples:
+      - input: "Ga. Ct. App."
+        output: "Ga_Ct_App"
+      - input: "ND Ill."
+        output: "ND_Ill"
+      - input: "Eleventh Circuit"
+        output: "Eleventh_Circuit"
+
+  year:
+    description: "4-digit decision year"
+    rules:
+      - "Use year value as-is from metadata"
+      - "Must be 4 digits"
+    examples:
+      - input: "2014"
+        output: "2014"
+
+  case_name:
+    description: "Formatted party names"
+    rules:
+      - "Spaces → hyphens"
+      - "Periods → nothing (remove)"
+      - "Commas → nothing (remove)"
+      - "Ampersands (&) → 'and'"
+      - "Keep: letters, numbers, hyphens only"
+    examples:
+      - input: "Indian Trail, LLC v. State Bank & Trust Co."
+        output: "Indian-Trail-LLC-v-State-Bank-and-Trust-Co"
+      - input: "Smith v. Jones"
+        output: "Smith-v-Jones"
+      - input: "Abbott Labs. v. Sandoz, Inc"
+        output: "Abbott-Labs-v-Sandoz-Inc"
+
+  citation:
+    description: "Reporter citation reference"
+    rules:
+      - "Spaces → underscores"
+      - "Periods → nothing (remove)"
+      - "Keep: letters, numbers, underscores only"
+    examples:
+      - input: "328 Ga. App. 524"
+        output: "328_GaApp_524"
+      - input: "743 F. Supp. 2d 762"
+        output: "743_FSupp2d_762"
+      - input: "759 S.E.2d 654"
+        output: "759_SE2d_654"
+
+  code:
+    description: "5-letter unique identifier"
+    rules:
+      - "Use code from registrar/code_generator"
+      - "Always 5 uppercase letters"
+      - "No 'W' character (base-25 encoding)"
+    examples:
+      - "AAAAA"
+      - "ABCDE"
+      - "XYZAB"
+
+# Sanitization Rules
+sanitization:
+  illegal_characters: '<>:"/\\|?*\x00-\x1f'
+  description: "Characters not allowed in filenames (OS-level restrictions)"
+  action: "Remove all illegal characters"
+
+# Length Limits
+length:
+  max_filename: 255        # Maximum total filename length (OS limit)
+  max_stem: 245            # Reserve 10 chars for extension + code separator
+  truncate_strategy: "trim_case_name"
+  description: "If filename exceeds limit, truncate case_name first, then citation"
+
+# Missing Field Handling
+missing_fields:
+  court:
+    fallback: "Unknown_Court"
+    required: true
+  year:
+    fallback: "XXXX"
+    required: true
+  case_name:
+    fallback: "Unnamed_Case"
+    required: true
+  citation:
+    fallback: "Unpub"
+    required: false
+    description: "Use 'Unpub' for unpublished opinions"
+
+# Metadata
+template_version: "1.0"
+last_updated: "2025-11-28"
+notes: |
+  Template based on legacy step1a caselaw renaming system.
+
+  Design decisions:
+    - Prefix "c." distinguishes caselaw from other document types (a. for articles, s. for statutes)
+    - Double underscores "__" visually separate major components
+    - Four hyphens "----" clearly mark the unique code boundary
+    - Hyphens in case names maintain readability while avoiding spaces
+    - Underscores in citations preserve structure (volume_reporter_page)
+
+  Legacy compatibility:
+    - Format matches existing 249,025+ coded files
+    - Code discovery logic preserves existing codes in filenames
