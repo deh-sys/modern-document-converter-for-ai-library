@@ -32,8 +32,10 @@ from pathlib import Path
 import click
 from rich.console import Console
 from rich.panel import Panel
+from rich.table import Table
 
 from src.core.orchestrator import process_batch
+from src.core.models import BatchResult
 
 
 # ============================================================================
@@ -227,11 +229,56 @@ def main(folder_path: Path):
     # Step 3: Process batch with selected strategy
     console.print(f"[bold cyan]Processing documents with '{strategy}' strategy...[/bold cyan]\n")
 
-    process_batch(folder_path, strategy)
+    batch_result = process_batch(folder_path, strategy, dry_run=False)
 
-    # Success
-    console.print("\n[green]✓ Processing complete![/green]\n")
-    sys.exit(0)
+    # Step 4: Display Results
+
+    # Summary Table
+    console.print("\n[bold cyan]Batch Processing Summary:[/bold cyan]\n")
+
+    summary_table = Table(show_header=True, header_style="bold cyan")
+    summary_table.add_column("Metric", style="cyan")
+    summary_table.add_column("Count", justify="right")
+
+    summary_table.add_row("Total Files", str(batch_result.total))
+    summary_table.add_row(
+        "Successful",
+        f"[green]{batch_result.successful}[/green]"
+    )
+    summary_table.add_row(
+        "Failed",
+        f"[red]{batch_result.failed}[/red]" if batch_result.failed > 0 else "0"
+    )
+    summary_table.add_row("Success Rate", f"{batch_result.success_rate:.1%}")
+
+    if batch_result.duration_seconds:
+        summary_table.add_row("Duration", f"{batch_result.duration_seconds:.2f}s")
+
+    console.print(summary_table)
+
+    # Failure Details (if any failures)
+    if batch_result.failed > 0 and batch_result.failure_details:
+        console.print("\n[bold red]Failed Files:[/bold red]\n")
+
+        failure_table = Table(show_header=True, header_style="bold red")
+        failure_table.add_column("File", style="red")
+        failure_table.add_column("Error", style="dim")
+
+        for filename, error in batch_result.failure_details:
+            failure_table.add_row(filename, error)
+
+        console.print(failure_table)
+
+    # Final Status
+    if batch_result.successful == batch_result.total:
+        console.print("\n[green]✓ All files processed successfully![/green]\n")
+        sys.exit(0)
+    elif batch_result.successful > 0:
+        console.print(f"\n[yellow]⚠️  Partial success: {batch_result.successful}/{batch_result.total} files processed[/yellow]\n")
+        sys.exit(0)
+    else:
+        console.print("\n[red]✗ Batch processing failed - no files were processed successfully[/red]\n")
+        sys.exit(1)
 
 
 # ============================================================================

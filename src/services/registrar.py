@@ -610,7 +610,7 @@ class Registrar:
                 step_order,
                 status.value,
                 now,
-                now if status in [ProcessingStatus.COMPLETED, ProcessingStatus.FAILED] else None,
+                now if status in [ProcessingStatus.SUCCESS, ProcessingStatus.FAILED] else None,
                 error_message,
             ),
         )

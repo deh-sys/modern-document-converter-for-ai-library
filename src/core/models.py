@@ -549,6 +549,10 @@ class BatchResult(BaseModel):
         default_factory=list,
         description="Batch-level warnings"
     )
+    failure_details: List[tuple[str, str]] = Field(
+        default_factory=list,
+        description="Failed files: [(filename, error_message), ...]"
+    )
     started_at: datetime = Field(
         default_factory=datetime.utcnow,
         description="Batch start time"

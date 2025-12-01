@@ -51,7 +51,7 @@ from src.services.code_generator import CodeGenerator
 from src.services.registrar import Registrar
 from src.plugins.caselaw import CaselawProcessor
 from src.formatters.filename_formatter import FilenameFormatter
-from src.core.models import DocumentType
+from src.core.models import DocumentType, ProcessingStatus
 
 
 # ============================================================================
@@ -314,8 +314,8 @@ class RenameStep:
             self.registrar.record_processing_step(
                 doc_id,
                 step_name="rename",
-                status="completed",
-                details=f"Renamed to {new_filename}",
+                step_order=1,
+                status=ProcessingStatus.SUCCESS,
             )
 
         # Success!

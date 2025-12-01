@@ -42,7 +42,7 @@ from typing import Optional, Dict, List
 
 import yaml
 
-from src.core.models import ConvertResult, DocumentType
+from src.core.models import ConvertResult, DocumentType, ProcessingStatus
 from src.services.text_extractor import extract_text
 from src.services.classifier import classify
 from src.cleaners.text_normalizer import normalize_text
@@ -170,10 +170,8 @@ class ConvertStep:
                     self.registrar.record_processing_step(
                         document_id=doc['id'],
                         step_name='convert',
-                        status='success',
-                        notes=f"Converted to {output_path.name}. "
-                              f"Removed {stats['lines_removed']} noise lines, "
-                              f"added {stats['headings_added']} headings.",
+                        step_order=2,
+                        status=ProcessingStatus.SUCCESS,
                     )
 
             # Success!
