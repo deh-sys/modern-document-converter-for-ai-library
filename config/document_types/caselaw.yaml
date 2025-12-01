@@ -361,7 +361,7 @@ extraction_rules:
 
 # Metadata
 classifier_version: "1.0"
-last_updated: "2025-11-28"
+last_updated: "2025-11-29"
 notes: |
   Based on analysis of real case documents from LexisNexis and Westlaw.
   Patterns tested against Georgia Court of Appeals opinions and federal district court cases.
@@ -371,3 +371,69 @@ notes: |
     - Medium indicators (court names, party designations) = 55 points combined
     - Multiple weak indicators can push to MEDIUM confidence
     - Negative indicators (statutory citations) reduce false positives
+
+# ============================================================================
+# TEXT CLEANING RULES
+# ============================================================================
+# Applied during convert_step to remove Lexis/Westlaw noise and format headings
+# for AI/RAG consumption
+
+cleaning_rules:
+  description: "Document-specific cleaning patterns for caselaw text"
+
+  # Patterns to delete entirely (noise removal)
+  # These are platform-specific headers/footers that add no semantic value
+  noise_patterns:
+    - pattern: '^As of:\s+[A-Za-z]+\s+\d{1,2},\s+\d{4}.*$'
+      description: "Lexis timestamp headers (e.g., 'As of: November 28, 2024 8:48 PM Z')"
+      action: delete_line
+
+    - pattern: '^Page\s+\d+\s+of\s+\d+\s*$'
+      description: "Page footer numbers from Lexis/Westlaw PDFs"
+      action: delete_line
+
+    - pattern: '^Load Date:.*$'
+      description: "Lexis load date metadata"
+      action: delete_line
+
+    - pattern: '^End of Document\s*$'
+      description: "Lexis document terminator"
+      action: delete_line
+
+    - pattern: '^\|\s*$'
+      description: "Stray table borders or dividers"
+      action: delete_line
+
+    - pattern: '^\s*\*+\s*$'
+      description: "Asterisk separators used in some opinions"
+      action: delete_line
+
+  # Patterns to convert to markdown headings
+  # These help structure the document for better AI comprehension
+  heading_patterns:
+    - pattern: '^Opinion by:\s*(.+)$'
+      description: "Opinion author attribution (e.g., 'Opinion by: LAGRUA')"
+      action: prepend_markdown
+      markdown_prefix: '## '
+
+    - pattern: '^([A-Z][A-Z0-9\s\W]{3,100})$'
+      description: "All-caps section headings (OPINION, BACKGROUND, ANALYSIS, CONCLUSION)"
+      action: prepend_markdown
+      markdown_prefix: '## '
+
+    - pattern: '^\d+\.\s+(.+)$'
+      description: "Numbered sections (1. Background, 2. Analysis, 3. Conclusion)"
+      action: prepend_markdown
+      markdown_prefix: '### '
+
+    - pattern: '^[IVX]+\.\s+(.+)$'
+      description: "Roman numeral sections (I. Introduction, II. Facts, III. Law)"
+      action: prepend_markdown
+      markdown_prefix: '### '
+
+  # Configuration
+  apply_order:
+    - noise_patterns  # Remove noise first
+    - heading_patterns  # Then format headings
+
+  preserve_line_breaks: true  # Keep paragraph structure intact

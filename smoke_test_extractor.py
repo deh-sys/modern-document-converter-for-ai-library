@@ -9,19 +9,24 @@ Usage:
     python smoke_test_extractor.py /path/to/file.pdf
     python smoke_test_extractor.py /path/to/file.pdf --max-pages 2
     python smoke_test_extractor.py /path/to/file.docx --no-normalize
+    python smoke_test_extractor.py /path/to/file.pdf --deep
 
 Features:
     - Pretty-printed JSON output (rich formatting)
     - Shows complete ExtractionResult model
     - Handles errors gracefully
     - Quick iteration during development
+    - Hybrid extraction: fast (pdfplumber) vs deep (marker-pdf AI)
 
 Examples:
-    # Test PDF extraction
+    # Test PDF extraction (fast mode, default)
     python smoke_test_extractor.py step1a/sample_files/sample.pdf
 
-    # Test DOCX extraction
-    python smoke_test_extractor.py step1b/z_sample_articles/article.pdf
+    # Test PDF extraction (deep mode with AI)
+    python smoke_test_extractor.py step1a/sample_files/sample.pdf --deep
+
+    # Test DOCX extraction (always uses python-docx, ignores --deep)
+    python smoke_test_extractor.py step1b/z_sample_articles/article.docx --deep
 
     # Limit pages
     python smoke_test_extractor.py large_file.pdf --max-pages 3
@@ -66,6 +71,11 @@ console = Console()
     help="Whether to normalize extracted text (default: yes)",
 )
 @click.option(
+    "--deep",
+    is_flag=True,
+    help="Use AI-powered deep extraction for complex PDF layouts (requires marker-pdf)",
+)
+@click.option(
     "--preview-length",
     type=int,
     default=500,
@@ -80,6 +90,7 @@ def main(
     file_path: Path,
     max_pages: Optional[int],
     normalize: bool,
+    deep: bool,
     preview_length: int,
     json_output: bool,
 ):
@@ -87,8 +98,19 @@ def main(
     Smoke test for text extraction service.
 
     Extracts text from FILE_PATH and displays the ExtractionResult as JSON.
+    Tests both fast (pdfplumber) and deep (marker-pdf AI) extraction modes.
     """
     console.print(f"\n[bold cyan]Extracting text from:[/bold cyan] {file_path}")
+
+    # Determine strategy based on --deep flag
+    strategy = 'deep' if deep else 'fast'
+
+    # Display extraction mode
+    if file_path.suffix.lower() == ".pdf":
+        mode = f"[yellow]DEEP (marker-pdf AI)[/yellow]" if strategy == 'deep' else f"[green]FAST (pdfplumber)[/green]"
+        console.print(f"[dim]Extraction strategy: {strategy} ({mode})[/dim]")
+    elif deep:
+        console.print(f"[dim]Extraction strategy: {strategy} ([blue]DOCX ignores strategy, uses python-docx[/blue])[/dim]")
 
     if max_pages:
         console.print(f"[dim]Max pages: {max_pages}[/dim]")
@@ -100,6 +122,7 @@ def main(
         file_path=file_path,
         max_pages=max_pages,
         normalize=normalize,
+        strategy=strategy,
     )
 
     # Convert to dict for JSON output

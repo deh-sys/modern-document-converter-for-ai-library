@@ -41,9 +41,13 @@ ruff>=0.1.9                     # Fast linting
 mypy>=1.7.0                     # Type checking
 
 # ============================================================================
-# OPTIONAL: Advanced Features (Future Phases)
+# OPTIONAL: Advanced Features
 # ============================================================================
-# marker-pdf>=0.2.0             # AI-powered PDF → Markdown (Phase 3+)
+# marker-pdf>=0.2.0             # AI-powered PDF extraction for complex multi-column layouts
+                                # OPTIONAL: Install with 'pip install marker-pdf' for deep extraction mode
+                                # WARNING: Downloads ~3-5GB of PyTorch models on first use
+                                # Usage: extract_text(path, use_deep_extraction=True)
+                                # Fast mode (pdfplumber) works without this dependency
 # ebooklib>=0.18                # EPUB/MOBI handling (Phase 3+)
 # pillow>=10.1.0                # Image extraction (Phase 3+)
 # pandas>=2.1.0                 # CSV export enhancement (optional)
@@ -51,8 +55,9 @@ mypy>=1.7.0                     # Type checking
 # ============================================================================
 # NOTES
 # ============================================================================
-# - pdfplumber replaces subprocess calls to pdftotext
+# - pdfplumber replaces subprocess calls to pdftotext (default PDF extraction)
 # - python-docx handles both .docx and (with LibreOffice) .doc conversion
 # - PyPDF2 for metadata only (pdfplumber handles text extraction)
-# - marker-pdf commented out for Phase 1 (simplicity)
+# - marker-pdf is OPTIONAL for complex PDF layouts (use_deep_extraction=True)
+# - Hybrid extraction: pdfplumber (fast) vs marker-pdf (deep) for PDFs
 # - Install with: pip install -r requirements.txt

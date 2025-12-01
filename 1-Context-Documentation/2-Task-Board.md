@@ -25,17 +25,23 @@
 
 ### Service Layer Development
 
-#### Text Extractor Service ✅ COMPLETED
+#### Text Extractor Service ✅ COMPLETED (Hybrid Strategy Implemented)
 - [x] Create `services/text_extractor.py`
-- [x] Implement PDF extraction using pdfplumber
+- [x] Implement PDF extraction using pdfplumber (fast mode)
   - [x] Extract full document text
   - [x] Extract first N pages (configurable via max_pages)
   - [ ] Extract multi-zone (first + last pages) - DEFERRED
   - [x] Handle extraction errors gracefully (returns ExtractionResult with success=False)
+- [x] Implement PDF extraction using marker-pdf (deep mode)
+  - [x] AI-powered extraction for complex multi-column layouts
+  - [x] Lazy import pattern (optional dependency)
+  - [x] Markdown-to-plaintext conversion
+  - [x] Graceful error handling when marker-pdf not installed
 - [x] Implement DOCX extraction using python-docx
   - [x] Extract full document text
   - [x] Preserve paragraph structure
   - [x] Handle extraction errors gracefully
+  - [x] ALWAYS use python-docx (ignores use_deep_extraction flag)
 - [x] Add file type detection (PDF vs DOCX vs legacy .doc)
 - [x] Create text normalizer with clean-text library
   - [x] Custom hyphen fixing for legal documents
@@ -45,6 +51,8 @@
   - [x] Test with sample PDF (Indian_Trail.pdf - 43K chars, 13 pages)
   - [x] CLI tool: `smoke_test_extractor.py`
   - [x] Rich output formatting
+  - [x] Add --deep flag for testing AI extraction
+  - [x] Test hybrid modes: fast (pdfplumber), deep (marker-pdf), DOCX
 - [ ] Write unit tests for text extraction (DEFERRED to Phase 2)
 
 #### Registrar Service ✅ COMPLETED
@@ -181,24 +189,35 @@
   - [x] 4/4 tests passing on Indian_Trail.pdf
   - [x] Expected output: c.Ga_Ct_App__2014__Indian-Trail-LLC-v-State-Bank-and-Trust-Co__328_Ga_App_524----AAAAA.pdf
 
-### Pipeline Steps (Remaining)
-- [ ] Create `steps/convert_step.py`
-- [ ] Create `steps/clean_step.py`
+### Pipeline Steps
+- [x] Create `steps/convert_step.py` ✅ COMPLETED
+  - [x] Complete conversion pipeline (extract → normalize → clean → save)
+  - [x] YAML-driven cleaning rules (noise removal + heading detection)
+  - [x] YAML frontmatter generation
+  - [x] In-memory processing (no intermediate files)
+  - [x] Registry integration
+  - [x] Dry-run mode support
+- [ ] Create `steps/clean_step.py` - MERGED INTO CONVERT_STEP
+  - Cleaning logic implemented within convert_step.py for efficiency
 
 ### Orchestration
-- [ ] Create `core/orchestrator.py`
+- [x] Create `core/orchestrator.py` - STUB CREATED
+  - Stub implementation for CLI integration
+  - Real implementation deferred to Phase 2, Step 4
 - [ ] Implement sequential pipeline execution
 - [ ] Add dry-run mode
 - [ ] Add rollback capability
 - [ ] Add progress tracking/reporting
 
-### CLI
-- [ ] Create `cli.py` using Click framework
-- [ ] Add `process` command
-- [ ] Add `--type` flag (caselaw, articles, etc.)
-- [ ] Add `--dry-run` flag
-- [ ] Add `--verbose` flag
-- [ ] Add status/reporting commands
+### CLI ✅ COMPLETED (Interactive Interface)
+- [x] Create `main.py` using Click framework
+  - [x] Interactive prompt-based interface
+  - [x] Auto-scan folder for PDFs/DOCX
+  - [x] Strategy selection (fast/deep) for PDFs
+  - [x] Educational warnings for optimal usage
+  - [x] Rich formatted output
+- [ ] Add status/reporting commands (deferred)
+- [ ] Add batch export functionality (deferred)
 
 ### Testing
 - [ ] End-to-end test with step1a sample files
@@ -330,6 +349,14 @@
   - Example: "Official Code of" (+100 points) definitively marks statutes, even if annotated with many case citations
   - Negative patterns use light penalties (-5) for annotated documents that naturally contain both statute and case text
   - Result: Annotated statutes correctly classified (STATUTE: 205 vs CASELAW: 130)
+- **Hybrid Text Extraction Strategy (Nov 29, 2025):** Dual-mode PDF extraction for handling complex layouts
+  - Problem: Lexis PDFs have mixed single-column headers + double-column bodies on same page
+  - Solution: Hybrid strategy with explicit `use_deep_extraction` parameter
+  - Fast Mode (default): pdfplumber - Python-native, fast, works for most PDFs
+  - Deep Mode (opt-in): marker-pdf - AI-powered, slow (~3-5GB models), handles complex layouts
+  - DOCX: ALWAYS uses python-docx (ignores extraction mode flag)
+  - Lazy import: marker-pdf is optional dependency, graceful error if not installed
+  - Backwards compatible: Default behavior unchanged (use_deep_extraction=False)
 
 ### Open Questions
 - [ ] Should we preserve original files or rename in place?

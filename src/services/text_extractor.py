@@ -3,10 +3,20 @@ Text Extractor Service - Document Processor
 
 Extract text from PDF and DOCX files with automatic normalization.
 
-Strategy Pattern:
-    - PDF extraction via pdfplumber (layout-preserving)
-    - DOCX extraction via python-docx
-    - Easy to swap implementations (e.g., marker-pdf for PDFs later)
+Hybrid PDF Extraction Strategy:
+    - PDF (strategy='fast'): pdfplumber - Fast, simple layouts, default
+    - PDF (strategy='deep'): marker-pdf - Slow, complex multi-column layouts, AI-powered
+    - DOCX: python-docx - Always used (ignores strategy parameter)
+
+The hybrid strategy allows users to choose between:
+    1. Fast extraction (pdfplumber): Good for most PDFs, single or simple multi-column
+    2. Deep extraction (marker-pdf): Required for complex layouts like Lexis PDFs
+       where headers and bodies have different column counts on same page
+
+Future strategies can be added:
+    - 'medical': Optimize for medical documents
+    - 'ocr_only': Force OCR even on text PDFs
+    - 'table_mode': Preserve table structures
 
 Returns:
     ExtractionResult model with normalized, clean text
@@ -14,7 +24,13 @@ Returns:
 Usage:
     from src.services.text_extractor import extract_text
 
+    # Standard extraction (fast)
     result = extract_text(Path("/files/document.pdf"))
+    result = extract_text(Path("/files/document.pdf"), strategy='fast')
+
+    # Deep extraction (complex layouts)
+    result = extract_text(Path("/files/lexis.pdf"), strategy='deep')
+
     if result.success:
         print(result.text)
     else:
@@ -32,9 +48,13 @@ from src.cleaners.text_normalizer import normalize_text
 # EXTRACTION STRATEGIES (Private Functions)
 # ============================================================================
 
-def _extract_pdf(file_path: Path, max_pages: Optional[int] = None) -> Tuple[str, int]:
+def _extract_pdf_fast(file_path: Path, max_pages: Optional[int] = None) -> Tuple[str, int]:
     """
-    Extract text from PDF using pdfplumber.
+    Extract text from PDF using pdfplumber (fast mode).
+
+    This is the default PDF extraction strategy for simple layouts.
+    Uses pdfplumber's layout-preserving extraction which works well
+    for single-column documents and simple multi-column layouts.
 
     Args:
         file_path: Path to PDF file
@@ -48,7 +68,7 @@ def _extract_pdf(file_path: Path, max_pages: Optional[int] = None) -> Tuple[str,
 
     Note:
         This is an internal strategy function. Use extract_text() instead.
-        To swap to marker-pdf later, just change this implementation.
+        For complex multi-column layouts (e.g., Lexis PDFs), use _extract_pdf_deep().
     """
     import pdfplumber
 
@@ -181,6 +201,124 @@ def _extract_legacy_doc(file_path: Path) -> Tuple[str, int]:
         return _extract_docx(converted_file)
 
 
+def _markdown_to_plain_text(markdown_text: str) -> str:
+    """
+    Convert markdown to plain text by stripping markdown syntax.
+
+    This is used to convert marker-pdf's markdown output to plain text
+    for consistency with pdfplumber's output format.
+
+    Args:
+        markdown_text: Markdown-formatted text from marker-pdf
+
+    Returns:
+        Plain text with markdown syntax removed
+
+    Note:
+        This performs basic markdown stripping (headers, bold, italic, links).
+        Advanced markdown features may not be fully stripped.
+    """
+    import re
+
+    # Remove markdown headers (### Header -> Header)
+    text = re.sub(r'^#{1,6}\s+', '', markdown_text, flags=re.MULTILINE)
+
+    # Remove bold/italic (**bold** or __bold__ -> bold)
+    text = re.sub(r'\*\*([^*]+)\*\*', r'\1', text)
+    text = re.sub(r'__([^_]+)__', r'\1', text)
+    text = re.sub(r'\*([^*]+)\*', r'\1', text)
+    text = re.sub(r'_([^_]+)_', r'\1', text)
+
+    # Remove links ([text](url) -> text)
+    text = re.sub(r'\[([^\]]+)\]\([^\)]+\)', r'\1', text)
+
+    # Remove inline code (`code` -> code)
+    text = re.sub(r'`([^`]+)`', r'\1', text)
+
+    # Remove code blocks (```...``` -> ...)
+    text = re.sub(r'```[^\n]*\n(.*?)\n```', r'\1', text, flags=re.DOTALL)
+
+    # Remove horizontal rules (--- or ***)
+    text = re.sub(r'^(\*\*\*|---|___)\s*$', '', text, flags=re.MULTILINE)
+
+    # Remove blockquotes (> text -> text)
+    text = re.sub(r'^>\s+', '', text, flags=re.MULTILINE)
+
+    # Remove list markers (- item or * item or 1. item -> item)
+    text = re.sub(r'^[\*\-\+]\s+', '', text, flags=re.MULTILINE)
+    text = re.sub(r'^\d+\.\s+', '', text, flags=re.MULTILINE)
+
+    return text
+
+
+def _extract_pdf_deep(file_path: Path, max_pages: Optional[int] = None) -> Tuple[str, int]:
+    """
+    Extract text from PDF using marker-pdf (deep mode with AI).
+
+    This uses AI-powered extraction for complex multi-column layouts
+    that simple pdfplumber heuristics cannot handle correctly.
+    Requires marker-pdf package (optional dependency, ~3-5GB with models).
+
+    Args:
+        file_path: Path to PDF file
+        max_pages: Optional limit (NOTE: marker processes full PDF, truncation applied post-processing)
+
+    Returns:
+        Tuple of (extracted_text, page_count)
+
+    Raises:
+        ImportError: If marker-pdf is not installed
+        Exception: Any marker-pdf error (corrupt PDF, unsupported format, etc.)
+
+    Note:
+        This is an internal strategy function. Use extract_text() instead.
+        First time use will download ~3-5GB of PyTorch models.
+        Installation: pip install marker-pdf
+
+    Architecture:
+        - Uses marker.converters.pdf.PdfConverter
+        - Returns markdown format (converted to plain text)
+        - Handles complex layouts: multi-column, tables, figures
+    """
+    # Lazy import marker-pdf (only when deep mode is used)
+    try:
+        from marker.converters.pdf import PdfConverter
+        from marker.models import create_model_dict
+        from marker.output import text_from_rendered
+    except ImportError:
+        raise ImportError(
+            "marker-pdf is required for deep PDF extraction but not installed.\n"
+            "Install with: pip install marker-pdf\n"
+            "Note: This will download ~3-5GB of PyTorch models on first use.\n"
+            "For standard extraction, use use_deep_extraction=False (default)."
+        )
+
+    # Initialize marker converter (lazy model loading)
+    converter = PdfConverter(artifact_dict=create_model_dict())
+
+    # Convert PDF to markdown
+    rendered = converter(str(file_path))
+
+    # Extract text from rendered result
+    markdown_text, _, _ = text_from_rendered(rendered)
+
+    # Convert markdown to plain text for consistency
+    plain_text = _markdown_to_plain_text(markdown_text)
+
+    # Get page count from rendered metadata
+    page_count = len(rendered.pages) if hasattr(rendered, 'pages') else 0
+
+    # Apply max_pages truncation if specified (post-processing)
+    # Note: marker processes full PDF, so this is less efficient than pdfplumber's page limiting
+    if max_pages is not None and page_count > max_pages:
+        # Rough heuristic: split by double newlines and take proportional amount
+        sections = plain_text.split('\n\n')
+        target_sections = int(len(sections) * (max_pages / page_count))
+        plain_text = '\n\n'.join(sections[:target_sections])
+
+    return plain_text, page_count
+
+
 # ============================================================================
 # PUBLIC API
 # ============================================================================
@@ -189,6 +327,7 @@ def extract_text(
     file_path: Path,
     max_pages: Optional[int] = None,
     normalize: bool = True,
+    strategy: str = 'fast',
 ) -> ExtractionResult:
     """
     Extract text from PDF or DOCX file with automatic normalization.
@@ -199,10 +338,19 @@ def extract_text(
         3. Normalizes text (unicode, hyphens, whitespace)
         4. Returns clean ExtractionResult
 
+    Hybrid PDF Extraction Strategy:
+        - DOCX: ALWAYS uses python-docx (ignores strategy parameter)
+        - PDF (strategy='fast'): Uses pdfplumber - fast, works for simple layouts
+        - PDF (strategy='deep'): Uses marker-pdf AI - slow, handles complex multi-column layouts
+
     Args:
         file_path: Absolute path to document file
-        max_pages: Optional limit on pages to extract (PDF only)
+        max_pages: Optional limit on pages to extract (PDF only, less efficient with deep mode)
         normalize: Whether to normalize extracted text (default: True)
+        strategy: Extraction strategy for PDFs (default: 'fast')
+                 Options: 'fast' (pdfplumber) or 'deep' (marker-pdf AI)
+                 Requires marker-pdf package (~3-5GB) for 'deep' mode
+                 Ignored for DOCX files (always uses python-docx)
 
     Returns:
         ExtractionResult model with:
@@ -212,16 +360,21 @@ def extract_text(
             - error_message: Error details if extraction failed
 
     Example:
-        >>> result = extract_text(Path("/files/case.pdf"), max_pages=5)
-        >>> if result.success:
-        ...     print(f"Extracted {len(result.text)} characters")
-        ... else:
-        ...     print(f"Error: {result.error_message}")
+        >>> # Standard extraction (fast, good for simple layouts)
+        >>> result = extract_text(Path("/files/case.pdf"), strategy='fast')
+        >>>
+        >>> # Deep extraction (slow, handles complex multi-column layouts)
+        >>> result = extract_text(Path("/files/lexis.pdf"), strategy='deep')
+        >>>
+        >>> # DOCX always uses python-docx (strategy parameter ignored)
+        >>> result = extract_text(Path("/files/brief.docx"), strategy='deep')
 
     Error Handling:
         Returns ExtractionResult with success=False instead of raising exceptions.
         Possible errors:
             - FileNotFoundError: File doesn't exist
+            - ImportError: marker-pdf not installed (when strategy='deep')
+            - ValueError: Invalid strategy parameter
             - Corrupt PDF/DOCX
             - Unsupported file format
             - LibreOffice not installed (for .doc files)
@@ -242,17 +395,40 @@ def extract_text(
             error_message=f"Not a file: {file_path}",
         )
 
+    # Validate strategy parameter
+    valid_strategies = ['fast', 'deep']
+    if strategy not in valid_strategies:
+        return ExtractionResult(
+            text="",
+            success=False,
+            error_message=f"Invalid strategy: '{strategy}'. "
+            f"Supported strategies: {', '.join(valid_strategies)}",
+        )
+
     # Detect file type and dispatch to strategy
     extension = file_path.suffix.lower()
 
     try:
         if extension == ".pdf":
-            raw_text, page_count = _extract_pdf(file_path, max_pages)
+            # PDF: Check extraction strategy (fast vs deep)
+            if strategy == 'deep':
+                raw_text, page_count = _extract_pdf_deep(file_path, max_pages)
+            elif strategy == 'fast':
+                raw_text, page_count = _extract_pdf_fast(file_path, max_pages)
+            else:
+                # This shouldn't happen due to validation above, but be defensive
+                return ExtractionResult(
+                    text="",
+                    success=False,
+                    error_message=f"Invalid PDF strategy: '{strategy}'",
+                )
 
         elif extension == ".docx":
+            # DOCX: ALWAYS use python-docx (ignore strategy parameter)
             raw_text, page_count = _extract_docx(file_path)
 
         elif extension == ".doc":
+            # Legacy DOC: Convert to DOCX then extract
             raw_text, page_count = _extract_legacy_doc(file_path)
 
         else:

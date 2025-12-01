@@ -90,6 +90,66 @@ class ExtractionResult(BaseModel):
     model_config = ConfigDict(frozen=True)
 
 
+class ConvertResult(BaseModel):
+    """
+    Result from document conversion to AI-ready text.
+
+    Returned by: steps/convert_step.py
+
+    Contains information about the conversion process including:
+        - Success status
+        - Source and output file paths
+        - Document type and metadata
+        - Cleaning statistics (lines removed, headings added)
+        - Processing time
+
+    Example:
+        result = convert_step.process_file(Path("case.pdf"))
+        if result.success:
+            print(f"Converted to: {result.output_file}")
+            print(f"Removed {result.lines_removed} noise lines")
+            print(f"Added {result.headings_added} markdown headings")
+        else:
+            print(result.error_message)
+    """
+    success: bool = Field(
+        description="Whether conversion succeeded"
+    )
+    source_file: str = Field(
+        description="Original source file path"
+    )
+    output_file: Optional[str] = Field(
+        default=None,
+        description="Output .txt file path (if successful)"
+    )
+    document_type: Optional[DocumentType] = Field(
+        default=None,
+        description="Classified document type"
+    )
+    character_count: int = Field(
+        default=0,
+        description="Number of characters in final cleaned text"
+    )
+    lines_removed: int = Field(
+        default=0,
+        description="Number of noise lines removed during cleaning"
+    )
+    headings_added: int = Field(
+        default=0,
+        description="Number of markdown headings added"
+    )
+    error_message: Optional[str] = Field(
+        default=None,
+        description="Error message if conversion failed"
+    )
+    processing_time: Optional[float] = Field(
+        default=None,
+        description="Time taken for conversion in seconds"
+    )
+
+    model_config = ConfigDict(frozen=True)
+
+
 class Classification(BaseModel):
     """
     Result from document type classification.
